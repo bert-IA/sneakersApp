@@ -6,7 +6,7 @@
         <title>My Web Page</title>
     </head>
 <body>
-    --- ajout d'une div id root ---
+// ajout d'une div avec l'id root
     <div id="root">Bert consulting Data Freelance</div>
     <script crossorigin 
     src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -15,8 +15,13 @@
     </script> 
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="text/babel">
+        // définition d'un composant React
+        function MyComponent() {
+            return <div>Mon composant React</div>;
+        } 
+        // rendu du composant dans la div avec l'id root
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<div>Mon élément remplace le contenu précédent👌</div>);
+        root.render(<MyComponent />);
     </script>
     </body>
 </html>
