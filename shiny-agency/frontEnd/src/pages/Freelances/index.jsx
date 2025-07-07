@@ -1,10 +1,8 @@
-import Card from '../../components/Card';
-import styled from 'styled-components';
-import colors from '../../utils/style/colors';
-import {useEffect, useState} from 'react';
-
-
-
+import { useEffect, useState } from 'react'
+import Card from '../../components/Card'
+import styled from 'styled-components'
+import colors from '../../utils/style/colors'
+import { Loader } from '../../utils/style/Atoms'
 
 const CardsContainer = styled.div`
   display: grid;
@@ -32,66 +30,54 @@ const PageSubtitle = styled.h2`
 const LoaderWrapper = styled.div`
   display: flex;
   justify-content: center;
-`;
+`
 
 function Freelances() {
-  const [isDataLoading, setDataLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [freelancersList, setFreelancersList] = useState([]); // ← MÊME NOM QUE L'API
+  const [isDataLoading, setDataLoading] = useState(false)
+  const [error, setError] = useState(false)
+  const [freelancersList, setFreelancesList] = useState([])
 
   useEffect(() => {
-    async function fetchFreelances(){
+    async function fetchFreelances() {
       setDataLoading(true)
-      setError(null)
-      try{
+      try {
         const response = await fetch(`http://localhost:8000/freelances`)
-        if (!response.ok) {
-          throw new Error(`HTTP error! status : ${response.status}`)
-        }
-        const data = await response.json()
-        console.log('🔍 Réponse complète de l\'API:', data)
-        
-        // SIMPLE : Même nom que l'API, pas de renommage
-        const { freelancersList } = data
-        console.log('🔍 freelancersList:', freelancersList)
-        console.log('🔍 Est-ce un tableau ?', Array.isArray(freelancersList))
-        
-        setFreelancersList(freelancersList)
-      } catch(err) {
-        console.error('Error fetching freelance : ', err)
-        setError(err.message)
+        const { freelancersList } = await response.json()
+        setFreelancesList(freelancersList)
+      } catch (err) {
+        console.log(err)
+        setError(true)
       } finally {
         setDataLoading(false)
       }
     }
-    fetchFreelances() // ← CORRECTION : fonction mal appelée
+    fetchFreelances()
   }, [])
 
-   return (
+  if (error) {
+    return <span>Oups il y a eu un problème</span>
+  }
+
+  return (
     <div>
       <PageTitle>Trouvez votre prestataire</PageTitle>
       <PageSubtitle>
         Chez Shiny nous réunissons les meilleurs profils pour vous.
       </PageSubtitle>
-      
       {isDataLoading ? (
-        <div>Chargement des freelances...</div>
-      ) : error ? (
-        <div>Erreur : {error}</div>
+        <LoaderWrapper>
+          <Loader />
+        </LoaderWrapper>
       ) : (
         <CardsContainer>
-          {freelancersList && freelancersList.length > 0 ? (
-            freelancersList.map((profile, index) => (
-              <Card
-                key={`${profile.name}-${index}`}
-                label={profile.job}
-                title={profile.name}
-                picture={profile.picture}
-              />
-            ))
-          ) : (
-            <div>Aucun freelance trouvé</div>
-          )}
+          {freelancersList.map((profile, index) => (
+            <Card
+              key={`${profile.name}-${index}`}
+              label={profile.job}
+              title={profile.name}
+              picture={profile.picture}
+            />
+          ))}
         </CardsContainer>
       )}
     </div>
