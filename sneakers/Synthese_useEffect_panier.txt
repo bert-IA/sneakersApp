@@ -1,0 +1,99 @@
+OBJECTIF 2 :
+Actuellement, si on rafraîchit la page, le panier est perdu car il n’est stocké que dans l’état React (mémoire vive).
+Nous allons maintenant sauvegarder le panier à chaque changement, c’est-à-dire gérer la persistance du panier dans React grâce au localStorage.
+Pour cela, nous utiliserons le hook useEffect afin de gérer cet effet de bord.
+
+---
+
+1. Qu’est-ce qu’un effet de bord ?
+Un effet de bord (side effect) est une action qui sort du simple rendu de l’UI :
+- Appeler une API, modifier le DOM, utiliser le localStorage, démarrer un timer, etc.
+Dans React, le rendu doit rester “pur” : il ne doit pas modifier l’extérieur. Les effets de bord sont donc gérés à part, avec le hook useEffect.
+
+---
+
+2. Fonctionnement général de useEffect
+- useEffect permet d’exécuter du code après le rendu du composant.
+- Il prend deux arguments :
+  - Une fonction à exécuter (l’effet)
+  - Un tableau de dépendances (pour contrôler quand l’effet s’exécute)
+- Il se place dans le corps du composant fonctionnel, en dehors du return.
+- Dans notre cas, la fonction à exécuter sera localStorage.setItem('cart', JSON.stringify(cart)), pour sauvegarder le panier à chaque modification.
+
+Exemples d’utilisation courants :
+- Charger des données à l’affichage du composant
+- Mettre à jour le titre de la page
+- Sauvegarder des données dans le localStorage
+
+---
+
+3. Étapes détaillées pour la persistance du panier
+
+1) Importer useEffect depuis React
+- En haut de votre fichier App.jsx, ajoutez :
+  import { useState, useEffect } from 'react';
+
+2) Initialiser le panier depuis le localStorage
+- Utilisez une fonction d'initialisation dans useState pour récupérer le panier sauvegardé.
+- Exemple avec une constante explicite :
+  const [cart, setCart] = useState(() => {
+    const savedCart = localStorage.getItem('cart');
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
+3) Sauvegarder le panier à chaque modification
+- Placer un useEffect dans le composant App, en dehors du return.
+- Dans ce useEffect, utiliser localStorage.setItem('cart', JSON.stringify(cart)) pour sauvegarder le panier à chaque modification.
+- Pourquoi JSON.stringify ?
+  Le localStorage ne stocke que des chaînes de caractères. On convertit donc l’objet JS en texte.
+- À chaque modification du panier, l’effet s’exécute et sauvegarde la nouvelle valeur.
+
+4) Éviter les sauvegardes inutiles
+- Le tableau de dépendances de useEffect permet de contrôler quand l’effet s’exécute.
+- Si on met [cart], l’effet ne s’exécutera que lorsque le panier change.
+- Si on met [], il ne s’exécutera qu’au premier rendu (utile pour la récupération initiale).
+- Expérience pédagogique : Essayez de mettre [cart], puis [], puis rien du tout, et observez la fréquence d’exécution de l’effet (console.log).
+
+---
+
+5. Modifications détaillées des composants
+
+Étape 1 : Modifier App.jsx
+1. Initialiser le panier depuis le localStorage
+   const [cart, setCart] = useState(() => {
+     const saved = localStorage.getItem('cart');
+     return saved ? JSON.parse(saved) : [];
+   });
+
+2. Sauvegarder le panier à chaque modification
+   useEffect(() => {
+     localStorage.setItem('cart', JSON.stringify(cart));
+   }, [cart]);
+
+3. (Optionnel) Ajouter des console.log pour observer l’exécution
+
+Étape 2 : Cart.jsx
+- Aucun changement nécessaire pour la persistance : le composant reçoit toujours le panier via les props.
+
+---
+
+6. Circulation des données
+- Lecture initiale :
+  - Au chargement, App lit le panier du localStorage et l’utilise comme valeur initiale.
+- Modification :
+  - Quand on ajoute/supprime un article, on met à jour l’état avec setCart.
+- Sauvegarde :
+  - À chaque changement de l’état cart, le useEffect sauvegarde la nouvelle valeur dans le localStorage.
+- Affichage :
+  - Cart reçoit le panier en props et l’affiche.
+
+---
+
+7. Résumé pédagogique
+- useEffect permet de synchroniser l’état React avec le monde extérieur (ici, le localStorage).
+- Le tableau de dépendances contrôle la fréquence d’exécution de l’effet.
+- On utilise JSON.stringify et JSON.parse pour convertir entre objets JS et chaînes de caractères.
+- Cette approche garantit que le panier persiste même après un rafraîchissement de la page.
+- La constante savedCart est utilisée pour nommer explicitement le panier récupéré du localStorage, améliorant ainsi la lisibilité du code.
+
+N’hésitez pas à illustrer chaque étape avec des extraits de code et à faire tester les différentes variantes du tableau de dépendances pour bien comprendre leur impact !

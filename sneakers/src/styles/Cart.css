@@ -1,0 +1,123 @@
+/* Style de base pour le panier */
+.cart {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 100px 0 0 0; /* Augmentation du margin-top pour descendre le panier */
+  border: 1px solid #e5e7eb;
+  height: fit-content;
+  position: sticky;
+  top: 0; 
+  color: white;
+}
+
+/* En-tête du panier */
+.cart-header h2 {
+  margin: 0 0 15px 0;
+  color: white;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Message panier vide */
+.empty-cart {
+  text-align: center;
+  color: #e0e7ff;
+  font-style: italic;
+  padding: 20px;
+  font-size: 1.1rem;
+}
+
+/* Container des items */
+.cart-items {
+  margin: 20px 0;
+}
+
+/* Style de chaque item du panier */
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.2s ease;
+  min-height: 50px;
+}
+
+.cart-item:hover {
+  background-color: rgba(255,255,255,0.08);
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+/* Image de l'item */
+.cart-item-image {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+/* Détails de l'item */
+.cart-item-details {
+  flex: 1;
+}
+
+.cart-item-details h4 {
+  margin: 0 0 5px 0;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.cart-item-details p {
+  margin: 3px 0;
+  color: white;
+  font-size: 0.8rem;
+}
+
+/* Prix de l'item */
+.cart-item-price {
+  color: white !important;
+  font-weight: 700 !important;
+  font-size: 0.9rem !important;
+}
+
+/* Résumé du panier */
+.cart-summary {
+  border-top: 2px solid #e5e7eb;
+  padding-top: 15px;
+  margin-top: 15px;
+}
+
+.cart-summary h3 {
+  margin: 0;
+  text-align: right;
+  color: #e0e7ff;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cart {
+    margin: 10px;
+    padding: 15px;
+  }
+  
+  .cart-item {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: center;
+  }
+  
+  .cart-item-image {
+    align-self: center;
+  }
+}
