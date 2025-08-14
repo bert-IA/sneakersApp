@@ -36,7 +36,33 @@ function App() {
             }
         });
     };
+
+    const removeFromCart = (sneaker) => {
+        console.log('🗑️ removeFromCart appelée avec:', sneaker);
+        console.log('📦 État actuel du panier:', cart);
+        setCart(prevCart => {
+            const existingItem = prevCart.find(item => item.id === sneaker.id);
+            if (existingItem) {
+                if (existingItem.quantity === 1) {
+                    // Si la quantité est 1, supprimer l'élément
+                    return prevCart.filter(item => item.id !== sneaker.id);
+                } else {
+                    // Sinon, diminuer la quantité
+                    return prevCart.map(item =>
+                        item.id === sneaker.id
+                            ? { ...item, quantity: item.quantity - 1 }
+                            : item
+                    );
+                }
+            }
+            return prevCart;
+        });
+    }
     
+    const clearCart = () => {
+        setCart([]); // Réinitialise le panier
+    }
+
     return (
         <div className="App">
             <Banner />
@@ -45,7 +71,11 @@ function App() {
                     <ShoppingList onAddToCart={addToCart} />
                 </div>
                 <div className="cart-section">
-                    <Cart cartItems={cart} />
+                    <Cart 
+                    cartItems={cart} 
+                    onRemoveFromCart={removeFromCart}
+                    onClearCart={clearCart}
+                    />
                 </div>
             </div>
         </div>

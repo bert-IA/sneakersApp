@@ -3,7 +3,7 @@
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 15px;  /* Réduit de 20px à 15px */
+  padding: 15px;  
   transition: all 0.3s ease;
   border: 1px solid #e5e7eb;
   width: 100%;
@@ -18,8 +18,8 @@
 
 /* Style pour les images de sneakers */
 .sneaker-image {
-  width: 80%;  /* Réduit de 100% à 80% */
-  height: 140px;  /* Réduit de 160px à 140px */
+  width: 80%;  
+  height: 140px;  
   border-radius: 8px;
   margin: 0 auto 12px auto;  /* Centre l'image */
   object-fit: cover;  /* Pour que l'image garde ses proportions */

@@ -1,10 +1,17 @@
 import '../styles/Cart.css';
 
-function Cart({ cartItems }) {
+function Cart({ cartItems, onRemoveFromCart, onClearCart }) {
+    console.log('🏪 Cart rendu avec props:');
+    console.log('   - cartItems:', cartItems);
+    console.log('   - onRemoveFromCart:', onRemoveFromCart);
     const totalItems= cartItems.reduce((sum, item) =>
         sum + item.quantity,0)
     const totalPrice = cartItems.reduce((sum, item) => 
         sum + (item.prix * item.quantity),0);
+
+    const handleRemoveFromCart = (itemToRemove) => {
+        onRemoveFromCart(itemToRemove);
+    }
 
     if (cartItems.length === 0) {
     return (
@@ -31,12 +38,34 @@ function Cart({ cartItems }) {
                             <p>Quantité: {item.quantity}</p>
                             <p className="cart-item-price">{item.prix * item.quantity}€</p>
                         </div>
+                        <div className="sneaker-action">
+                            <button 
+                                onClick={() => {
+                                    console.log('🖱️ Clic sur le bouton supprimer');
+                                    console.log('📦 Item à supprimer:', item);
+                                    handleRemoveFromCart(item);
+                                }} 
+                                className="remove-from-cart"
+                            >
+                                Supprimer du panier
+                            </button>
+
+
+                        </div>
                     </div>
                 ))}
             </div>
             
             <div className="cart-summary">
                 <h3>Total: {totalPrice}€</h3>
+            </div>
+            <div className="cart-actions">
+                <button 
+                    onClick={onClearCart}
+                    className="clear-cart-btn"
+                >
+                    Vider le panier
+                </button>
             </div>
         </div>
     );
