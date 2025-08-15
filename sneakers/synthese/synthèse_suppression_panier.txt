@@ -1,0 +1,174 @@
+SYNTHÈSE : AJOUT ET SUPPRESSION D'ARTICLES DANS LE PANIER REACT
+===============================================================
+
+1. VOCABULAIRE ET CONCEPTS CLÉS
+--------------------------------
+
+🔹 CALLBACK : Fonction passée en paramètre à un autre composant, qui sera "rappelée" plus tard
+🔹 PROPS : Propriétés passées d'un composant parent vers un composant enfant  
+🔹 LIFTING STATE UP : Remonter l'état partagé vers le composant parent commun
+🔹 COMMUNICATION ENFANT → PARENT : Via les callbacks passés en props
+
+2. ARCHITECTURE GÉNÉRALE
+-------------------------
+
+App.jsx (COMPOSANT PARENT)
+├── État global : const [cart, setCart] = useState()
+├── Fonctions métier : addToCart(), removeFromCart()
+├── Transmission des callbacks via props
+│
+└── Cart.jsx (COMPOSANT ENFANT)
+    ├── Réception des callbacks via props
+    ├── Fonctions locales : handleRemoveFromCart()
+    └── Gestion des événements UI (onClick)
+
+3. FONCTIONS POUR L'AJOUT AU PANIER
+------------------------------------
+
+📍 FONCTION MÉTIER : addToCart (dans App.jsx)
+   - TYPE : Fonction de gestion d'état
+   - PARAMÈTRES : sneaker (objet contenant les données de la sneaker)
+   - RÔLE : Ajouter ou incrémenter la quantité d'un article dans le panier
+   - ACCÈS : État global 'cart' via closure
+   - LOGIQUE :
+     * Vérifier si l'article existe déjà (find)
+     * Si existe : incrémenter la quantité (map)
+     * Sinon : ajouter avec quantité = 1 (spread operator)
+
+📍 CALLBACK DE TRANSMISSION : onAddToCart (prop)
+   - TYPE : Référence vers addToCart passée en prop
+   - PASSAGE : App → ShoppingList → SneakerItem
+   - CONVENTION : "on" + nom d'action (convention React)
+   - RÔLE : Permettre la communication enfant → parent
+
+4. FONCTIONS POUR LA SUPPRESSION DU PANIER
+-------------------------------------------
+
+📍 FONCTION MÉTIER : removeFromCart (dans App.jsx)
+   - TYPE : Fonction de gestion d'état  
+   - PARAMÈTRES : sneaker (objet contenant les données de la sneaker à supprimer)
+   - RÔLE : Supprimer ou décrémenter la quantité d'un article du panier
+   - ACCÈS : État global 'cart' via closure
+   - LOGIQUE :
+     * Trouver l'article dans le panier (find)
+     * Si quantité = 1 : supprimer complètement (filter)
+     * Si quantité > 1 : décrémenter la quantité (map)
+     * Si non trouvé : retourner le panier inchangé
+
+📍 CALLBACK DE TRANSMISSION : onRemoveFromCart (prop)
+   - TYPE : Référence vers removeFromCart passée en prop
+   - PASSAGE : App → Cart
+   - CONVENTION : "on" + nom d'action
+   - RÔLE : Permettre au composant Cart de modifier l'état global
+
+📍 FONCTION LOCALE : handleRemoveFromCart (dans Cart.jsx)
+   - TYPE : Gestionnaire d'événement local
+   - PARAMÈTRES : itemToRemove (objet sneaker à supprimer)
+   - RÔLE : Intermédiaire entre l'événement UI et le callback parent
+   - LOGIQUE : Appeler onRemoveFromCart(itemToRemove)
+
+📍 CALLBACK D'ÉVÉNEMENT : onClick (fonction anonyme)
+   - TYPE : Gestionnaire d'événement React
+   - PARAMÈTRES : Aucun (accès à 'item' via closure)
+   - RÔLE : Réagir au clic utilisateur et déclencher la suppression
+   - LOGIQUE : Appeler handleRemoveFromCart(item)
+
+5. PASSAGE DES CALLBACKS PARENT → ENFANT
+-----------------------------------------
+
+ÉTAPE 1 : CRÉATION DU CALLBACK DANS LE PARENT (App.jsx)
+```javascript
+const removeFromCart = (sneaker) => {
+    setCart(prevCart => {
+        // Logique de suppression...
+    });
+};
+```
+
+ÉTAPE 2 : TRANSMISSION VIA PROPS (App.jsx)
+```javascript
+<Cart 
+    cartItems={cart} 
+    onRemoveFromCart={removeFromCart}  // ← PASSAGE DU CALLBACK
+/>
+```
+▶️ removeFromCart devient onRemoveFromCart en prop
+
+ÉTAPE 3 : RÉCEPTION DANS L'ENFANT (Cart.jsx)
+```javascript
+function Cart({ cartItems, onRemoveFromCart }) {
+    // onRemoveFromCart = référence vers removeFromCart d'App
+}
+```
+▶️ onRemoveFromCart pointe vers la même fonction que removeFromCart
+
+ÉTAPE 4 : UTILISATION DU CALLBACK REÇU
+```javascript
+const handleRemoveFromCart = (itemToRemove) => {
+    onRemoveFromCart(itemToRemove);  // ← APPEL DU CALLBACK PARENT
+};
+```
+▶️ Quand Cart appelle onRemoveFromCart(), c'est removeFromCart() d'App qui s'exécute
+
+6. CIRCULATION DES DONNÉES LORS DE LA SUPPRESSION
+--------------------------------------------------
+
+FLUX COMPLET : CLIC → SUPPRESSION → MISE À JOUR UI
+
+[1] ÉVÉNEMENT UTILISATEUR
+    └── Clic sur bouton "Supprimer du panier"
+
+[2] DÉCLENCHEMENT onClick
+    └── Fonction anonyme s'exécute
+    └── Accès à 'item' via closure du map()
+    └── Appel : handleRemoveFromCart(item)
+
+[3] EXÉCUTION handleRemoveFromCart  
+    └── Réception : itemToRemove
+    └── Appel : onRemoveFromCart(itemToRemove)
+
+[4] EXÉCUTION removeFromCart (App)
+    └── Réception : sneaker
+    └── Accès à l'état global 'cart' via closure
+    └── Modification : setCart(nouveauPanier)
+
+[5] MISE À JOUR REACT
+    └── React détecte le changement d'état
+    └── useEffect sauvegarde dans localStorage  
+    └── Re-render de Cart avec nouveaux cartItems
+    └── Interface mise à jour automatiquement
+
+7. CONCEPTS REACT ILLUSTRÉS
+----------------------------
+
+✅ UNIDIRECTIONAL DATA FLOW : Les données descendent, les événements remontent
+✅ CLOSURE : Accès aux variables du scope parent (item, cart)
+✅ IMMUTABILITÉ : Création de nouveaux tableaux au lieu de mutation
+✅ COMPOSITION : Séparation entre logique métier (App) et présentation (Cart)
+✅ PROPS DRILLING : Passage des fonctions à travers la hiérarchie
+✅ SINGLE SOURCE OF TRUTH : L'état du panier centralisé dans App
+
+8. AVANTAGES DE CETTE ARCHITECTURE
+-----------------------------------
+
+🎯 RÉUTILISABILITÉ : Cart peut être utilisé avec différentes logiques de suppression
+🎯 MAINTENABILITÉ : Logique centralisée dans App, facile à modifier
+🎯 TESTABILITÉ : Chaque fonction peut être testée indépendamment  
+🎯 SÉPARATION DES RESPONSABILITÉS : App = logique, Cart = présentation
+🎯 PRÉVISIBILITÉ : Flux de données clair et traceable
+
+9. PATTERN DE COMMUNICATION ENFANT → PARENT
+--------------------------------------------
+
+PRINCIPE : L'enfant ne peut pas modifier directement l'état du parent
+SOLUTION : Le parent passe une fonction (callback) à l'enfant
+UTILISATION : L'enfant appelle cette fonction pour "remonter" des données
+
+SCHÉMA GÉNÉRAL :
+Parent : const handleData = (data) => { /* logique */ }
+Parent : <Enfant onData={handleData} />
+Enfant : const { onData } = props
+Enfant : onData(donnéesÀRemonter)  // Déclenche handleData dans le parent
+
+Cette architecture respecte les principes fondamentaux de React et assure
+une communication efficace et maintenable entre composants.

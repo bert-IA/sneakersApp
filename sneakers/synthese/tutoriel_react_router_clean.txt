@@ -1,0 +1,1338 @@
+TUTORIEL REACT ROUTER - TRANSFORMATION EN SINGLE PAGE APPLICATION
+================================================================
+
+OBJECTIF DE CE TUTORIEL
+========================
+
+Transformer notre application sneakers en une véritable Single Page Application (SPA) avec navigation fluide entre :
+- HomePage : Catalogue des sneakers
+- CartPage : Gestion du panier + bouton Commander
+- CheckoutPage : Formulaire de commande (préparation)
+
+PARTIE 1 : COMPRENDRE LES SINGLE PAGE APPLICATIONS
+===================================================
+
+1.1 QU'EST-CE QU'UNE SINGLE PAGE APPLICATION ?
+-----------------------------------------------
+
+DÉFINITION TECHNIQUE
+Une Single Page Application (SPA) est une application web qui charge une seule page HTML initiale, puis met à jour dynamiquement le contenu sans recharger complètement la page.
+
+COMPARAISON : SITES TRADITIONNELS VS SPA
+
+SITES TRADITIONNELS (Multi-page)
+
+Utilisateur clique sur un lien (ex: "Page B")
+    ↓
+Navigateur envoie une requête HTTP au serveur
+    ↓
+Serveur génère une nouvelle page HTML complète
+(Header, navigation, contenu, footer, CSS, JS)
+    ↓
+Navigateur reçoit la réponse et recharge ENTIÈREMENT la page
+    ↓
+Flash blanc pendant le rechargement + perte de l'état JavaScript
+    ↓
+L'utilisateur voit la nouvelle page (délai de chargement visible)
+
+
+SINGLE PAGE APPLICATIONS
+
+Utilisateur clique sur un lien (ex: "Page B")
+    ↓
+JavaScript (React Router) intercepte le clic
+    ↓
+React Router change l'URL dans la barre d'adresse (/page-b)
+    ↓
+React Router compare l'URL aux routes définies :
+    - Route "/page-a" → ComposantA ? NON
+    - Route "/page-b" → ComposantB ? OUI ✓
+    ↓
+React Router affiche le ComposantB
+(Le composant est DÉJÀ chargé en mémoire, pas de requête serveur)
+    ↓
+Transition immédiate et fluide vers le nouveau contenu
+(Seule la zone de contenu change, header/navigation restent)
+
+
+EXEMPLES CONCRETS DE SPA
+- Gmail : Navigation entre boîte de réception, envoyés, corbeille sans rechargement
+- Facebook : Scroll infini, navigation entre profils, timeline
+- Netflix : Navigation entre catégories, lecteur vidéo
+- Spotify Web : Navigation entre playlists, recherche, lecture
+
+AVANTAGES DES SPA
+
+EXPÉRIENCE UTILISATEUR
+- Fluidité : Pas de "flash blanc" entre les pages
+- Rapidité : Pas de rechargement complet du DOM
+- Interactivité : Animations et transitions fluides
+- Offline : Possibilité de fonctionner hors-ligne (avec service workers)
+
+PERFORMANCE TECHNIQUE
+- Chargement initial : CSS/JS chargés une seule fois
+- Données : Seules les données nécessaires sont récupérées (API REST/GraphQL)
+- Cache navigateur : Meilleure utilisation du cache
+- Bande passante : Moins de transferts de données
+
+DÉVELOPPEMENT
+- État de l'application : Plus facile à maintenir
+- Composants réutilisables : Architecture modulaire
+- Debugging : État centralisé plus simple à déboguer
+
+INCONVÉNIENTS À CONNAÎTRE
+
+COMPLEXITÉ INITIALE
+- Bundle size : Application plus lourde au premier chargement
+- SEO : Plus complexe pour l'indexation (résolu avec SSR/SSG)
+- Navigation : Gestion manuelle de l'historique du navigateur
+
+DÉFIS TECHNIQUES
+- Memory leaks : Gestion de la mémoire sur une longue session
+- État complexe : Plus de logique côté client
+- Accessibilité : Navigation au clavier et lecteurs d'écran
+
+1.2 POURQUOI REACT ROUTER ?
+----------------------------
+
+LE PROBLÈME SANS ROUTER
+Dans notre application actuelle, tout est dans un seul composant App.jsx :
+
+// Structure actuelle - tout mélangé
+function App() {
+  return (
+    <div>
+      <Banner />           // Header toujours visible
+      <ShoppingList />     // Catalogue des sneakers
+      <Cart />            // Panier toujours visible
+    </div>
+  );
+}
+
+LIMITATIONS DE CETTE APPROCHE
+1. EXPÉRIENCE UTILISATEUR MÉDIOCRE
+   - Tout est visible en même temps
+   - Pas de séparation logique des fonctionnalités
+   - Interface encombrée
+
+2. NAVIGATION IMPOSSIBLE
+   - Pas d'URL spécifique pour le panier
+   - Impossible de partager un lien vers le panier
+   - Bouton "Retour" du navigateur ne fonctionne pas
+
+3. MAINTENABILITÉ DIFFICILE
+   - Logique de plusieurs pages dans un seul composant
+   - État global difficile à gérer
+   - Code difficile à organiser
+
+LA SOLUTION REACT ROUTER
+React Router résout ces problèmes en :
+
+1. SÉPARATION DES RESPONSABILITÉS
+   - Une page = un composant spécialisé
+   - URL spécifique pour chaque page
+   - Navigation logique entre les sections
+
+2. GESTION AUTOMATIQUE
+   - Historique du navigateur (boutons précédent/suivant)
+   - URL dans la barre d'adresse
+   - Rechargement de page sur la bonne section
+
+3. ARCHITECTURE PROPRE
+   - Composants indépendants et réutilisables
+   - Code organisé par fonctionnalité
+   - Maintenance simplifiée
+
+1.3 ARCHITECTURE CIBLE DE NOTRE APPLICATION
+--------------------------------------------
+
+STRUCTURE ACTUELLE VS STRUCTURE CIBLE
+
+AVANT (Monolithique)
+App.jsx
+├── Banner (header fixe)
+├── ShoppingList (tout le catalogue)
+└── Cart (panier toujours visible)
+
+APRÈS (SPA avec routing)
+App.jsx
+├── Banner (header fixe avec navigation)
+└── Router
+    ├── HomePage (Route : /)
+    │   ├── ShoppingList
+    │   └── État : liste des sneakers
+    ├── CartPage (Route : /cart)
+    │   ├── Cart
+    │   ├── Bouton "Commander"
+    │   └── État : produits dans le panier
+    └── CheckoutPage (Route : /checkout)
+        ├── Formulaire de commande
+        └── État : informations de livraison
+
+BÉNÉFICES DE CETTE ARCHITECTURE
+
+URLS SPÉCIFIQUES
+- http://localhost:3000/ → Page d'accueil avec catalogue
+- http://localhost:3000/cart → Page panier
+- http://localhost:3000/checkout → Page commande
+
+NAVIGATION INTUITIVE
+- Liens dans le header pour naviguer
+- Bouton "Voir le panier" depuis la homepage
+- Bouton "Commander" depuis la page panier
+- Bouton "Retour" pour revenir en arrière
+
+SÉPARATION LOGIQUE
+- HomePage : Découverte et ajout de produits
+- CartPage : Gestion du panier et validation
+- CheckoutPage : Finalisation de la commande
+
+PARTIE 2 : ASPECTS TECHNIQUES
+==============================
+
+2.1 INSTALLATION DE REACT ROUTER
+---------------------------------
+
+PRÉREQUIS
+Vérifiez que vous êtes dans le bon répertoire :
+
+cd C:\Users\bertr\Documents\REACT\OCR\sneakers
+
+INSTALLATION AVEC YARN
+Nous utilisons Yarn comme gestionnaire de paquets :
+
+yarn add react-router-dom
+
+Cette commande installe :
+- react-router-dom : La bibliothèque complète pour le routing web
+- Dépendances automatiques : react-router et history
+
+VÉRIFICATION DE L'INSTALLATION
+Après installation, vérifiez dans package.json :
+
+{
+  "dependencies": {
+    "react-router-dom": "^6.x.x",
+    // ... autres dépendances
+  }
+}
+
+2.2 CONCEPTS FONDAMENTAUX DE REACT ROUTER
+------------------------------------------
+
+LES COMPOSANTS ESSENTIELS
+
+1. BrowserRouter
+   - Composant racine qui active le routing
+   - Utilise l'API HTML5 History
+   - Doit englober toute l'application
+
+2. Routes
+   - Container pour définir les routes
+   - Remplace l'ancien Switch de React Router v5
+
+3. Route
+   - Définit une route spécifique
+   - Associe un chemin à un composant
+   - Props principales : path et element
+
+4. Link
+   - Crée des liens de navigation
+   - Remplace les balises <a> traditionnelles
+   - Évite le rechargement de page
+
+5. useNavigate
+   - Hook pour navigation programmatique
+   - Remplace l'ancien useHistory
+   - Permet de naviguer depuis le JavaScript
+
+EXEMPLE DE BASE
+
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+
+function App() {
+  return (
+    <BrowserRouter>
+      <nav>
+        <Link to="/">Accueil</Link>
+        <Link to="/cart">Panier</Link>
+      </nav>
+      
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/cart" element={<CartPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+EXPLICATION DÉTAILLÉE DE CET EXEMPLE
+
+DIFFÉRENCE FONDAMENTALE : NAVIGATION VS AFFICHAGE
+
+Il faut bien comprendre que nous avons DEUX systèmes qui travaillent ensemble :
+
+1. LES LIENS DE NAVIGATION (ce qu'on clique)
+2. LES ROUTES D'AFFICHAGE (ce qu'on voit)
+
+PARTIE NAVIGATION - LES LINK
+
+<Link to="/">Accueil</Link>
+
+Ce que fait cette ligne :
+- Crée un lien cliquable avec le texte "Accueil"
+- Quand on clique dessus, change l'URL vers "/"
+- Remplace un <a href="/"> traditionnel
+- N'affiche RIEN par lui-même, c'est juste un bouton
+
+<Link to="/cart">Panier</Link>
+
+Ce que fait cette ligne :
+- Crée un lien cliquable avec le texte "Panier"  
+- Quand on clique dessus, change l'URL vers "/cart"
+- N'affiche RIEN par lui-même, c'est juste un bouton
+
+PARTIE AFFICHAGE - LES ROUTE
+
+<Route path="/" element={<HomePage />} />
+
+Ce que fait cette ligne :
+- Surveille l'URL de la page
+- SI l'URL est exactement "/", ALORS affiche le composant <HomePage />
+- Ne crée AUCUN lien cliquable, c'est purement de l'affichage
+
+<Route path="/cart" element={<CartPage />} />
+
+Ce que fait cette ligne :
+- Surveille l'URL de la page
+- SI l'URL est exactement "/cart", ALORS affiche le composant <CartPage />
+- Ne crée AUCUN lien cliquable, c'est purement de l'affichage
+
+COMMENT ÇA MARCHE ENSEMBLE - LE CYCLE COMPLET
+
+1. L'utilisateur voit deux boutons : "Catalogue" et "Panier"
+
+2. L'utilisateur clique sur "Panier"
+   - Le <Link to="/cart"> détecte le clic
+   - React Router empêche le comportement par défaut du navigateur
+   - L'URL change vers "/cart" (sans requête serveur)
+
+3. React Router détecte le changement d'URL automatiquement
+   - Il parcourt toutes les <Route> définies dans <Routes>
+   - Il trouve <Route path="/cart" element={<CartPage />} />
+   - Il décide d'afficher le composant <CartPage />
+
+4. React re-rend SEULEMENT la zone de contenu
+   - Banner reste identique (pas de re-rendu)
+   - Seule la zone <Routes> change de contenu
+   - CartPage remplace HomePage instantanément
+
+5. L'utilisateur voit maintenant le contenu de CartPage
+   - Transition immédiate (0ms)
+   - Aucun flash blanc
+   - État de l'application conservé (panier, données, formulaires, etc.)
+
+ANALOGIE SIMPLE
+
+Imaginez une télévision :
+
+LES LINK = Les boutons de la télécommande
+- Bouton "1" = <Link to="/">
+- Bouton "2" = <Link to="/cart">
+- Ils permettent de CHANGER de chaîne
+
+LES ROUTE = Les chaînes de télévision  
+- Chaîne 1 = <Route path="/" element={<HomePage />} />
+- Chaîne 2 = <Route path="/cart" element={<CartPage />} />
+- Elles définissent CE QUI S'AFFICHE sur chaque chaîne
+
+Quand vous appuyez sur le bouton "2", la télé change sur la chaîne 2 !
+
+EXEMPLE CONCRET DANS NOTRE APPLICATION
+
+ÉTAPE 1 : ÉTAT INITIAL (URL : http://localhost:3000/)
+- Boutons visibles : [Catalogue] [Panier (0)]
+- Contenu affiché : HomePage avec la liste des sneakers
+- Route active : <Route path="/" element={<HomePage />} />
+- Composants en mémoire : App, Banner, HomePage, ShoppingList
+
+ÉTAPE 2 : CLIC SUR "PANIER"
+- Action : <Link to="/cart"> intercepte le clic
+- Changement URL : http://localhost:3000/cart
+- React Router : Cherche la route qui correspond à "/cart"
+- Trouvé : <Route path="/cart" element={<CartPage />} />
+
+ÉTAPE 3 : CHANGEMENT DE CONTENU (0ms plus tard)
+- Boutons visibles : [Catalogue] [Panier (0)] (IDENTIQUES)
+- Contenu affiché : CartPage avec le panier (NOUVEAU)
+- Route active : <Route path="/cart" element={<CartPage />} />
+- Composants en mémoire : App, Banner, CartPage, Cart (HomePage toujours en mémoire mais pas affiché)
+
+ÉTAPE 4 : RÉSULTAT FINAL
+- Navigation instantanée sans rechargement
+- Banner conservé (logo, navigation)
+- État de l'application préservé (panier, données)
+- Historique navigateur mis à jour (bouton précédent fonctionne)
+
+POURQUOI CETTE SÉPARATION ?
+
+1. FLEXIBILITÉ
+   - On peut avoir plusieurs liens vers la même page
+   - On peut changer l'apparence des liens sans toucher aux routes
+
+2. RÉUTILISABILITÉ  
+   - Les mêmes routes peuvent être accessibles de différentes façons
+   - Navigation par boutons, par URLs directes, par code JavaScript
+
+3. MAINTENABILITÉ
+   - Navigation et contenu sont séparés
+   - Plus facile de modifier l'un sans casser l'autre
+
+RÉCAPITULATIF VISUEL
+
+STRUCTURE COMPLÈTE :
+BrowserRouter (active le système de routing)
+├── NAVIGATION (toujours visible)
+│   ├── Link to="/" → Bouton "Catalogue"
+│   └── Link to="/cart" → Bouton "Panier"
+└── AFFICHAGE (change selon l'URL)
+    ├── Route path="/" → Affiche HomePage si URL = "/"
+    └── Route path="/cart" → Affiche CartPage si URL = "/cart"
+
+2.3 PLANIFICATION DE L'IMPLÉMENTATION
+--------------------------------------
+
+ÉTAPES DE TRANSFORMATION
+
+ÉTAPE 1 : Installation et configuration de base
+- Installer react-router-dom
+- Configurer BrowserRouter dans App.jsx
+- Créer la structure de navigation
+
+ÉTAPE 2 : Création de la HomePage
+- Extraire ShoppingList vers HomePage
+- Conserver la fonctionnalité d'ajout au panier
+- Ajouter navigation vers CartPage
+
+ÉTAPE 3 : Création de la CartPage
+- Extraire Cart vers CartPage
+- Ajouter bouton "Commander"
+- Implémenter navigation vers CheckoutPage
+
+ÉTAPE 4 : Préparation de CheckoutPage (VERSION BASIQUE)
+- Créer une page simple avec titre "Votre commande"
+- Ajouter un lien de retour vers le panier
+- Préparer la structure pour les développements futurs
+
+ÉTAPE 5 : Navigation et finitions
+- Ajouter les liens de navigation
+- Gérer l'état partagé entre pages
+- Optimiser l'expérience utilisateur
+
+GESTION DE L'ÉTAT PARTAGÉ
+
+PROBLÉMATIQUE THÉORIQUE
+Avec le routing, nous pourrions rencontrer un défi technique majeur : l'état doit survivre aux changements de composants.
+
+EXEMPLE DE CE QUI POURRAIT MAL SE PASSER (Architecture problématique)
+
+MAUVAISE APPROCHE - État dans les pages individuelles :
+
+HomePage.jsx
+├── useState([]) // État du panier ici - ERREUR !
+└── ShoppingList
+
+CartPage.jsx  
+├── useState([]) // Autre état panier, différent - ERREUR !
+└── Cart
+
+SCÉNARIO PROBLÉMATIQUE :
+
+1. UTILISATEUR SUR HOMEPAGE (URL: /)
+   - Composants actifs : App → Banner → HomePage → ShoppingList
+   - État local dans HomePage : liste des sneakers affichés
+   - L'utilisateur ajoute 3 sneakers au panier
+
+2. UTILISATEUR NAVIGUE VERS CARTPAGE (URL: /cart)
+   - React Router DÉMONTE HomePage et ShoppingList
+   - React Router MONTE CartPage et Cart
+   - PROBLÈME : Si l'état du panier était dans HomePage, il est PERDU !
+   - PROBLÈME : Si l'état des filtres était dans ShoppingList, il est PERDU !
+
+3. UTILISATEUR RETOURNE À HOMEPAGE (URL: /)
+   - React Router DÉMONTE CartPage et Cart
+   - React Router MONTE à nouveau HomePage et ShoppingList (NOUVEAUX composants)
+   - PROBLÈME : HomePage redémarre à zéro, comme au premier chargement
+   - RÉSULTAT : Panier vide, filtres perdus, sélections effacées !
+
+BONNE NOUVELLE : NOTRE ARCHITECTURE ACTUELLE ÉVITE CES PROBLÈMES !
+
+ANALYSE DE L'ARCHITECTURE EXISTANTE
+
+Dans notre application sneakers actuelle, l'état est déjà correctement organisé :
+
+STRUCTURE ACTUELLE - État centralisé (CORRECT !) :
+
+App.jsx
+├── useState([]) // État unique du panier - EXCELLENT !
+├── addToCart, removeFromCart, clearCart // Fonctions centralisées
+├── localStorage persistence // Sauvegarde automatique
+├── ShoppingList (reçoit onAddToCart via props)
+└── Cart (reçoit cartItems, onRemoveFromCart, onClearCart via props)
+
+AVANTAGES DE CETTE ARCHITECTURE :
+
+1. ÉTAT SURVIVRA AU ROUTING
+   - Le panier vit dans App.jsx, qui ne se démonte jamais
+   - Les fonctions de gestion restent disponibles
+   - Aucun risque de perte de données
+
+2. PERSISTANCE DÉJÀ ASSURÉE
+   - localStorage sauvegarde automatiquement le panier
+   - Récupération au démarrage de l'application
+   - Fonctionnement même après refresh (F5)
+
+3. PROPS DÉJÀ ORGANISÉES
+   - Les composants reçoivent les données via props
+   - Architecture prête pour le routing
+   - Séparation claire des responsabilités
+
+TRANSITION VERS LE ROUTING - CE QUI VA CHANGER
+
+Quand vous ajouterez le routing :
+
+Le cart restera dans App.jsx (AUCUN CHANGEMENT)
+Les fonctions addToCart, removeFromCart, clearCart resteront dans App.jsx (AUCUN CHANGEMENT)
+Vous passerez ces props aux nouvelles pages (HomePage, CartPage) au lieu de directement à ShoppingList et Cart
+La persistance localStorage continuera de fonctionner (AUCUN CHANGEMENT)
+
+AVANT LE ROUTING (Actuel) :
+App.jsx
+├── État cart + fonctions
+├── ShoppingList (reçoit onAddToCart)
+└── Cart (reçoit cartItems, onRemoveFromCart, onClearCart)
+
+APRÈS LE ROUTING (Objectif) :
+App.jsx
+├── État cart + fonctions (IDENTIQUE)
+└── Router
+    ├── HomePage 
+    │   └── ShoppingList (reçoit onAddToCart via HomePage)
+    └── CartPage
+        └── Cart (reçoit cartItems, onRemoveFromCart, onClearCart via CartPage)
+
+CONCLUSION SUR LA GESTION D'ÉTAT
+
+Vous ÉVITEREZ les problèmes classiques du routing car :
+- Votre état est déjà dans le bon endroit (App.jsx)
+- Vos fonctions sont déjà centralisées
+- La persistance est déjà implémentée
+- L'architecture est déjà prête pour le routing
+
+Il suffira de créer les nouvelles pages (HomePage, CartPage, CheckoutPage) et de leur passer les props nécessaires !
+
+SOLUTIONS POSSIBLES
+
+1. CONTEXT API (Recommandé pour ce projet)
+   - Avantages : Natif React, parfait pour état modéré
+   - Inconvénients : Un peu de boilerplate
+
+2. PROPS DRILLING (Solution simple)
+   - Avantages : Simple à comprendre
+   - Inconvénients : Devient complexe avec plus de niveaux
+
+3. REDUX (Overkill pour ce projet)
+   - Avantages : Très puissant
+   - Inconvénients : Complexité excessive pour nos besoins
+
+POUR CE TUTORIEL
+Nous utiliserons un mélange :
+- useState dans App.jsx pour l'état principal
+- Props passées aux pages
+- Context API si nécessaire plus tard
+
+PARTIE 3 : IMPLÉMENTATION PRATIQUE
+===================================
+
+3.1 CONFIGURATION DE BASE - ÉTAPE PAR ÉTAPE
+--------------------------------------------
+
+ÉTAPE 1 : MODIFIER App.jsx
+
+Ouvrez src/Components/App.jsx et remplacez le contenu par :
+
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Banner from './Banner';
+import HomePage from './HomePage';
+import CartPage from './CartPage';
+import CheckoutPage from './CheckoutPage';
+import '../styles/App.css';
+
+function App() {
+  // État principal de l'application
+  const [cart, setCart] = useState([]);
+
+  // Charger le panier depuis localStorage au démarrage
+  useEffect(() => {
+    const savedCart = localStorage.getItem('sneakersCart');
+    if (savedCart) {
+      setCart(JSON.parse(savedCart));
+    }
+  }, []);
+
+  // Sauvegarder le panier à chaque modification
+  useEffect(() => {
+    localStorage.setItem('sneakersCart', JSON.stringify(cart));
+  }, [cart]);
+
+  // Fonction pour ajouter au panier
+  const addToCart = (sneaker) => {
+    setCart(currentCart => {
+      const existingItem = currentCart.find(item => item.id === sneaker.id);
+      if (existingItem) {
+        return currentCart.map(item =>
+          item.id === sneaker.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+      return [...currentCart, { ...sneaker, quantity: 1 }];
+    });
+  };
+
+  // Fonction pour retirer du panier
+  const removeFromCart = (sneakerId) => {
+    setCart(currentCart => currentCart.filter(item => item.id !== sneakerId));
+  };
+
+  // Fonction pour modifier la quantité
+  const updateQuantity = (sneakerId, newQuantity) => {
+    if (newQuantity <= 0) {
+      removeFromCart(sneakerId);
+      return;
+    }
+    setCart(currentCart =>
+      currentCart.map(item =>
+        item.id === sneakerId
+          ? { ...item, quantity: newQuantity }
+          : item
+      )
+    );
+  };
+
+  // Fonction pour vider le panier
+  const clearCart = () => {
+    setCart([]);
+  };
+
+  return (
+    <BrowserRouter>
+      <div className="app">
+        <Banner cartItemsCount={cart.reduce((total, item) => total + item.quantity, 0)} />
+        
+        <main className="main-content">
+          <Routes>
+            <Route 
+              path="/" 
+              element={
+                <HomePage 
+                  cart={cart}
+                  addToCart={addToCart}
+                />
+              } 
+            />
+            <Route 
+              path="/cart" 
+              element={
+                <CartPage 
+                  cart={cart}
+                  removeFromCart={removeFromCart}
+                  updateQuantity={updateQuantity}
+                  clearCart={clearCart}
+                />
+              } 
+            />
+            <Route 
+              path="/checkout" 
+              element={<CheckoutPage />} 
+            />
+          </Routes>
+        </main>
+      </div>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+
+NOTE IMPORTANTE : CONVENTION DE NOMMAGE DES PROPS
+
+Dans votre code existant, vous aviez peut-être des props avec le préfixe "on" :
+- onRemoveFromCart, onUpdateQuantity, onClearCart
+
+Dans ce tutoriel, nous utilisons la convention sans "on" :
+- removeFromCart, updateQuantity, clearCart
+
+POURQUOI CE CHANGEMENT ?
+
+1. ÉVOLUTION DES CONVENTIONS
+   - Ancien style : onRemoveFromCart (événement remonté au parent)
+   - Nouveau style : removeFromCart (fonction utilitaire passée)
+
+2. CONTEXTE DU ROUTER
+   - Avec le routing, les fonctions sont passées comme "services"
+   - Moins notion d'événement, plus notion d'action disponible
+
+3. COHÉRENCE AVEC L'ÉCOSYSTÈME MODERNE
+   - Les frameworks modernes tendent vers cette approche
+   - Plus direct et expressif
+
+POUR GARDER LA COHÉRENCE
+
+Si vous préférez garder vos conventions existantes, utilisez plutôt :
+
+<CartPage 
+  cart={cart}
+  onRemoveFromCart={removeFromCart}
+  onUpdateQuantity={updateQuantity}
+  onClearCart={clearCart}
+/>
+
+L'important est d'être COHÉRENT dans tout le projet. Choisissez une convention et gardez-la partout !
+
+ÉTAPE 2 : MODIFIER Banner.jsx POUR LA NAVIGATION
+
+Ouvrez src/Components/Banner.jsx et remplacez par :
+
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import logo from '../assets/logosneaker.jpg';
+import '../styles/Banner.css';
+
+function Banner({ cartItemsCount }) {
+  const location = useLocation();
+
+  return (
+    <header className="banner">
+      <div className="banner-content">
+        <div className="logo-section">
+          <img src={logo} alt="Sneakers Store" className="logo" />
+          <h1>Sneakers Collection</h1>
+        </div>
+        
+        <nav className="navigation">
+          <Link 
+            to="/" 
+            className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
+          >
+            Catalogue
+          </Link>
+          <Link 
+            to="/cart" 
+            className={`nav-link cart-link ${location.pathname === '/cart' ? 'active' : ''}`}
+          >
+            Panier ({cartItemsCount})
+          </Link>
+        </nav>
+      </div>
+    </header>
+  );
+}
+
+export default Banner;
+
+ÉTAPE 3 : CRÉER HomePage.jsx
+
+Créez le fichier src/Components/HomePage.jsx :
+
+import React from 'react';
+import { Link } from 'react-router-dom';
+import ShoppingList from './ShoppingList';
+
+function HomePage({ cart, addToCart }) {
+  const cartItemsCount = cart.reduce((total, item) => total + item.quantity, 0);
+
+  return (
+    <div className="homepage">
+      <div className="homepage-header">
+        <h2>Découvrez notre collection de sneakers</h2>
+        <p>Trouvez la paire parfaite parmi notre sélection premium</p>
+        
+        {cartItemsCount > 0 && (
+          <div className="cart-summary">
+            <p>Vous avez {cartItemsCount} article(s) dans votre panier</p>
+            <Link to="/cart" className="view-cart-btn">
+              Voir le panier
+            </Link>
+          </div>
+        )}
+      </div>
+      
+      <ShoppingList cart={cart} addToCart={addToCart} />
+    </div>
+  );
+}
+
+export default HomePage;
+
+ÉTAPE 4 : CRÉER CartPage.jsx
+
+Créez le fichier src/Components/CartPage.jsx :
+
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import Cart from './Cart';
+
+function CartPage({ cart, removeFromCart, updateQuantity, clearCart }) {
+  const navigate = useNavigate();
+
+  const handleCheckout = () => {
+    if (cart.length === 0) {
+      alert('Votre panier est vide !');
+      return;
+    }
+    navigate('/checkout');
+  };
+
+  return (
+    <div className="cart-page">
+      <div className="cart-page-header">
+        <h2>Votre panier</h2>
+        <Link to="/" className="continue-shopping">
+          ← Continuer mes achats
+        </Link>
+      </div>
+
+      {cart.length === 0 ? (
+        <div className="empty-cart">
+          <p>Votre panier est vide</p>
+          <Link to="/" className="start-shopping-btn">
+            Découvrir nos produits
+          </Link>
+        </div>
+      ) : (
+        <div className="cart-content">
+          <Cart 
+            cart={cart}
+            removeFromCart={removeFromCart}
+            updateQuantity={updateQuantity}
+            clearCart={clearCart}
+          />
+          
+          <div className="cart-actions">
+            <button 
+              onClick={handleCheckout}
+              className="checkout-btn"
+            >
+              Procéder à la commande
+            </button>
+            <button 
+              onClick={clearCart}
+              className="clear-cart-btn"
+            >
+              Vider le panier
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default CartPage;
+
+ÉTAPE 5 : CRÉER CheckoutPage.jsx (VERSION SIMPLE)
+
+Créez le fichier src/Components/CheckoutPage.jsx :
+
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+function CheckoutPage() {
+  return (
+    <div className="checkout-page">
+      <div className="checkout-header">
+        <h2>Votre commande</h2>
+        <Link to="/cart" className="back-to-cart">
+          ← Retour au panier
+        </Link>
+      </div>
+
+      <div className="checkout-content">
+        <p>Fonctionnalité de commande à développer dans le prochain tutoriel</p>
+        
+        <div className="temp-actions">
+          <Link to="/cart" className="btn-secondary">
+            ← Retour au panier
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default CheckoutPage;
+
+ÉTAPE 6 : AJOUTER LES STYLES CSS
+
+Ajoutez à src/styles/App.css :
+
+/* Navigation dans Banner */
+.navigation {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #333;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.nav-link:hover {
+  background-color: #f0f0f0;
+}
+
+.nav-link.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.cart-link {
+  background-color: #28a745;
+  color: white !important;
+}
+
+.cart-link:hover {
+  background-color: #218838;
+}
+
+/* HomePage */
+.homepage-header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+}
+
+.cart-summary {
+  margin-top: 15px;
+  padding: 15px;
+  background-color: #d4edda;
+  border-radius: 5px;
+}
+
+.view-cart-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+/* CartPage */
+.cart-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #eee;
+}
+
+.continue-shopping {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.empty-cart {
+  text-align: center;
+  padding: 50px;
+}
+
+.start-shopping-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 24px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.cart-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.checkout-btn {
+  padding: 12px 24px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.clear-cart-btn {
+  padding: 12px 24px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* CheckoutPage - Version simple */
+.checkout-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #eee;
+}
+
+.back-to-cart {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.checkout-content {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.checkout-content ul {
+  text-align: left;
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+.temp-actions {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-secondary {
+  padding: 12px 24px;
+  background-color: #6c757d;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+3.2 TESTS ET VÉRIFICATION
+--------------------------
+
+ÉTAPE 1 : DÉMARRER L'APPLICATION
+
+Dans votre terminal :
+
+yarn start
+
+ÉTAPE 2 : TESTS À EFFECTUER
+
+TEST DE NAVIGATION
+1. Aller sur http://localhost:3000/
+2. Vérifier que la page d'accueil s'affiche
+3. Cliquer sur "Panier" dans la navigation
+4. Vérifier l'URL : http://localhost:3000/cart
+5. Cliquer sur "Catalogue" pour revenir
+
+TEST DU PANIER
+1. Ajouter des articles depuis la page d'accueil
+2. Vérifier que le compteur dans la navigation se met à jour
+3. Aller sur la page panier
+4. Vérifier que les articles sont présents
+
+TEST DE PERSISTENCE
+1. Ajouter des articles au panier
+2. Rafraîchir la page (F5)
+3. Vérifier que le panier est conservé
+
+TEST DES BOUTONS NAVIGATEUR
+1. Naviguer entre les pages
+2. Utiliser le bouton "Précédent" du navigateur
+3. Vérifier que la navigation fonctionne
+
+DÉPANNAGE FRÉQUENT
+
+ERREUR : "Cannot resolve 'react-router-dom'"
+Solution : Vérifiez l'installation avec yarn add react-router-dom
+
+ERREUR : "useNavigate is not a function" 
+Solution : Vérifiez que vous êtes dans un composant enfant de BrowserRouter
+
+ERREUR : Navigation ne fonctionne pas
+Solution : Vérifiez que BrowserRouter englobe bien toute l'application
+
+ERREUR : Panier se vide au changement de page
+Solution : Vérifiez que l'état est bien dans App.jsx, pas dans les pages
+
+3.3 OPTIMISATIONS ET AMÉLIORATIONS
+-----------------------------------
+
+AMÉLIORATIONS POSSIBLES
+
+1. LOADING STATES
+   - Ajouter des indicateurs de chargement
+   - Gérer les transitions entre pages
+
+2. ANIMATIONS
+   - Transitions fluides entre pages
+   - Animations d'ajout/suppression du panier
+
+3. GESTION D'ERREURS
+   - Page 404 pour routes inexistantes
+   - Gestion des erreurs de localStorage
+
+4. ACCESSIBILITÉ
+   - Navigation au clavier
+   - ARIA labels pour lecteurs d'écran
+
+5. PERFORMANCE
+   - Lazy loading des composants
+   - Mémoisation avec React.memo
+
+EXEMPLE D'AMÉLIORATION : PAGE 404
+
+Ajoutez cette route dans App.jsx :
+
+<Route path="*" element={<NotFoundPage />} />
+
+Créez src/Components/NotFoundPage.jsx :
+
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+function NotFoundPage() {
+  return (
+    <div style={{ textAlign: 'center', padding: '50px' }}>
+      <h2>404 - Page non trouvée</h2>
+      <p>La page que vous cherchez n'existe pas.</p>
+      <Link to="/">Retour à l'accueil</Link>
+    </div>
+  );
+}
+
+export default NotFoundPage;
+
+PARTIE 4 : VALIDATION ET TESTS
+===============================
+
+4.1 CHECKLIST DE VÉRIFICATION COMPLÈTE
+---------------------------------------
+
+INSTALLATION ET CONFIGURATION
+□ react-router-dom installé avec yarn
+□ BrowserRouter configuré dans App.jsx
+□ Import des composants Router corrects
+
+STRUCTURE DES COMPOSANTS
+□ HomePage créée et fonctionnelle
+□ CartPage créée et fonctionnelle  
+□ CheckoutPage créée (version basique avec titre)
+□ Banner modifiée avec navigation
+
+FONCTIONNALITÉS CORE
+□ Navigation entre pages fonctionne
+□ URLs spécifiques pour chaque page
+□ Boutons précédent/suivant du navigateur
+□ Compteur panier dans la navigation
+
+GESTION DE L'ÉTAT
+□ Panier conservé entre les pages
+□ localStorage fonctionne correctement
+□ Ajout/suppression d'articles opérationnel
+□ Quantités modifiables
+
+EXPÉRIENCE UTILISATEUR
+□ Messages d'état appropriés (panier vide, etc.)
+□ Liens de navigation logiques
+□ Retour possible à tout moment
+□ Actions claires (Commander, Continuer achats)
+
+STYLES ET DESIGN
+□ Navigation stylisée et intuitive
+□ Pages cohérentes visuellement
+□ Responsive design préservé
+□ Boutons et liens clairement identifiables
+
+4.2 TESTS UTILISATEUR DÉTAILLÉS
+--------------------------------
+
+SCÉNARIO 1 : PREMIER ACHAT
+1. Aller sur http://localhost:3000/
+2. Parcourir le catalogue
+3. Ajouter 2-3 articles différents
+4. Vérifier le compteur dans la navigation
+5. Cliquer sur "Voir le panier" depuis la homepage
+6. Vérifier les articles dans le panier
+7. Cliquer sur "Procéder à la commande"
+8. Arriver sur la page de checkout (basique)
+
+SCÉNARIO 2 : MODIFICATION DU PANIER
+1. Avoir des articles dans le panier
+2. Aller sur la page panier via navigation
+3. Modifier les quantités
+4. Supprimer un article
+5. Retourner au catalogue
+6. Ajouter un nouvel article
+7. Retourner au panier
+8. Vérifier les modifications
+
+SCÉNARIO 3 : NAVIGATION COMPLEXE
+1. Commencer sur la homepage
+2. Aller au panier (vide)
+3. Retour au catalogue avec "Continuer achats"
+4. Ajouter des articles
+5. Utiliser le bouton "Précédent" du navigateur
+6. Utiliser le bouton "Suivant" du navigateur
+7. Rafraîchir la page à différents moments
+8. Vérifier la cohérence
+
+SCÉNARIO 4 : URLS DIRECTES
+1. Aller directement sur http://localhost:3000/cart
+2. Vérifier l'affichage panier vide
+3. Aller directement sur http://localhost:3000/checkout
+4. Vérifier l'affichage de la page basique "Votre commande"
+5. Aller sur http://localhost:3000/inexistant (si 404 implémentée)
+
+4.3 VALIDATION TECHNIQUE
+-------------------------
+
+PERFORMANCE
+□ Temps de chargement initial acceptable
+□ Navigation fluide sans délais
+□ Pas de re-rendus inutiles observés
+□ Mémoire stable (pas de fuites)
+
+COMPATIBILITÉ
+□ Fonctionne sur Chrome
+□ Fonctionne sur Firefox  
+□ Fonctionne sur Edge
+□ Mobile responsive conservé
+
+ROBUSTESSE
+□ Gestion panier vide
+□ Gestion localStorage indisponible
+□ Gestion erreurs JavaScript
+□ Récupération après refresh
+
+CODE QUALITY
+□ Pas d'erreurs dans la console
+□ Pas d'avertissements React
+□ Code lisible et organisé
+□ Props typées correctement
+
+4.4 MÉTRIQUES DE SUCCÈS
+------------------------
+
+MÉTRIQUES FONCTIONNELLES
+- Navigation réussie entre toutes les pages : 100%
+- Conservation du panier après refresh : 100%
+- Fonctionnement boutons navigateur : 100%
+- Cohérence compteur panier : 100%
+
+MÉTRIQUES UTILISATEUR
+- Temps pour trouver le panier : < 5 secondes
+- Facilité de retour au catalogue : Évidente
+- Compréhension du processus achat : Claire
+- Satisfaction navigation générale : Positive
+
+MÉTRIQUES TECHNIQUES
+- Erreurs JavaScript : 0
+- Avertissements React : 0
+- Temps navigation entre pages : < 100ms
+- Taille bundle après ajout Router : < +50KB
+
+CONCLUSION ET PROCHAINES ÉTAPES
+================================
+
+RÉCAPITULATIF DES ACCOMPLISSEMENTS
+-----------------------------------
+
+Félicitations ! Vous avez transformé avec succès votre application sneakers en une véritable Single Page Application avec :
+
+ARCHITECTURE MODERNE
+- Navigation fluide sans rechargement de page
+- URLs spécifiques pour chaque section
+- Séparation claire des responsabilités
+
+EXPÉRIENCE UTILISATEUR AMÉLIORÉE
+- Interface intuitive avec navigation claire
+- Gestion intelligente du panier entre les pages
+- Boutons navigateur pleinement fonctionnels
+
+CODE STRUCTURÉ ET MAINTENABLE
+- Composants indépendants et réutilisables
+- État centralisé et bien géré
+- Architecture évolutive
+
+PROCHAINES ÉTAPES RECOMMANDÉES
+-------------------------------
+
+IMMÉDIAT (Exercices d'approfondissement)
+1. Personnaliser les styles CSS de navigation
+2. Ajouter des animations de transition
+3. Implémenter la page 404
+4. Tester tous les scénarios utilisateur
+
+COURT TERME (Prochaine session)
+1. Développer le contenu complet de CheckoutPage
+2. Ajouter récapitulatif de commande avec détails
+3. Créer le formulaire d'informations de livraison
+4. Implémenter validation des champs et simulation de commande
+
+MOYEN TERME (Évolutions avancées)
+1. Ajouter recherche et filtres avancés
+2. Implémenter authentification utilisateur
+3. Créer historique des commandes
+4. Optimiser performance avec lazy loading
+
+LONG TERME (Features entreprise)
+1. Intégration API backend réelle
+2. Gestion multi-devises
+3. Système de wishlist
+4. Analytics et tracking utilisateur
+
+RESSOURCES POUR ALLER PLUS LOIN
+--------------------------------
+
+DOCUMENTATION OFFICIELLE
+- React Router : https://reactrouter.com/
+- React : https://react.dev/
+- Create React App : https://create-react-app.dev/
+
+CONCEPTS À APPROFONDIR
+- Context API pour état global complexe
+- Redux pour applications plus importantes
+- React Query pour gestion serveur state
+- React Hook Form pour formulaires avancés
+
+OUTILS DE DÉVELOPPEMENT
+- React Developer Tools (extension navigateur)
+- Redux DevTools (si évolution vers Redux)
+- React Router DevTools
+- Lighthouse pour audit performance
+
+Le prochain tutoriel couvrira :
+CHECKOUT COMPLET : RÉCAPITULATIF, FORMULAIRES, VALIDATION ET SOUMISSION
+
+En attendant, expérimentez avec votre nouvelle architecture SPA et n'hésitez pas à personnaliser selon vos préférences !
