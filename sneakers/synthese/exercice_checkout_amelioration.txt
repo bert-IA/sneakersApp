@@ -1,0 +1,423 @@
+EXERCICE REACT ROUTER - AMELIORATION DE LA PAGE CHECKOUT
+=========================================================
+
+OBJECTIF DE CET EXERCICE
+=========================
+
+Transformer la CheckoutPage actuelle (très basique) en un système de commande professionnel avec :
+
+1. **CheckoutPage améliorée** avec récapitulatif détaillé de la commande
+2. **ShippingPage** pour les informations de livraison (version simple pour commencer)
+3. **Navigation fluide** entre les deux pages avec React Router
+
+RESULTAT ATTENDU - PAGES FINALES
+====================================
+
+CHECKOUTPAGE.JSX - PAGE RECAPITULATIF
+--------------------------------------
+URL : /checkout
+Nom du fichier : src/Pages/CheckoutPage.jsx
+
+CONTENU ATTENDU :
+- Titre "Finaliser votre commande"
+- Nombre total d'articles dans le panier
+- Liste des articles format : "Nom de la sneaker x2" -> "prix total ligne"
+- Calculs financiers : Sous-total HT, TVA (20%), Total TTC
+- Bouton "Continuer vers la livraison" -> navigation vers /shipping
+- Lien "← Retour au panier" -> navigation vers /cart
+- Message si panier vide : "Votre panier est vide" + lien vers catalogue
+
+SHIPPINGPAGE.JSX - PAGE LIVRAISON (VERSION SIMPLE)
+---------------------------------------------------
+URL : /shipping  
+Nom du fichier : src/Pages/ShippingPage.jsx
+
+CONTENU ATTENDU :
+- Titre "Informations de livraison"
+- Message "Cette page sera développée dans le prochain cours"
+- Lien "← Retour au récapitulatif" -> navigation vers /checkout
+- Message informatif sur la suite du développement
+
+APP.JSX - MISE A JOUR DU ROUTEUR
+---------------------------------
+Nom du fichier : src/Components/App.jsx
+
+MODIFICATIONS ATTENDUES :
+- Nouvelle route /shipping ajoutée dans Routes
+- Props supplémentaires passées à CheckoutPage (pour les calculs)
+- Import de ShippingPage
+
+QUESTIONS GUIDEES POUR VOUS AIDER
+====================================
+
+ETAPE 1 : PLANIFICATION - REFLECHISSEZ AVANT DE CODER
+------------------------------------------------------
+
+Question 1.1 - Architecture
+Listez les 3 étapes principales que vous devez réaliser pour obtenir le résultat final.
+
+Votre réponse :
+1. _________________________________
+2. _________________________________  
+3. _________________________________
+
+Question 1.2 - Données nécessaires
+La CheckoutPage doit afficher un récapitulatif détaillé. De quelles informations a-t-elle besoin ?
+
+Cochez les props nécessaires depuis App.jsx :
+□ cart (tableau des articles)
+□ cartItemsCount (nombre total d'articles)
+□ addToCart (fonction d'ajout)
+□ removeFromCart (fonction de suppression)
+□ clearCart (fonction de vidage)
+
+Justifiez vos choix :
+_________________________________________________________________
+_________________________________________________________________
+
+Question 1.3 - Calculs financiers
+Pour afficher Sous-total HT, TVA, Total TTC, quels calculs devez-vous effectuer ?
+
+Complétez le pseudocode :
+```
+sousTotal = _________________________________
+tva = _____________________________________
+totalTTC = ________________________________
+```
+
+Question 1.4 - Navigation
+Quelles sont les 3 types de navigation que vous devez implémenter dans CheckoutPage ?
+
+1. Navigation si panier vide (afficher message) : ________________
+2. Navigation utilisateur "Retour panier" : _________________
+3. Navigation utilisateur "Vers livraison" : ________________
+
+ETAPE 2 : IMPLEMENTATION - DEVELOPPEMENT GUIDE
+===============================================
+
+Question 2.1 - Structure CheckoutPage
+Organisez la structure JSX de votre CheckoutPage. Dans quel ordre devez-vous placer les éléments ?
+
+Numérotez dans l'ordre logique :
+□ Boutons de navigation
+□ Titre de la page
+□ Nombre total d'articles
+□ Liste des articles du panier
+□ Calculs des totaux (HT, TVA, TTC)
+□ Gestion du cas panier vide
+
+Question 2.2 - Affichage des articles
+Pour afficher chaque article du panier, vous devez faire une boucle. Complétez le code :
+
+```jsx
+{cart._____(item => (
+    <div key={_______} className="order-line">
+        <span>{_______} x{_______}</span>
+        <span>{_______ * _______}€</span>
+    </div>
+))}
+```
+
+Question 2.3 - Gestion panier vide
+Comment gérer le cas où l'utilisateur arrive sur /checkout avec un panier vide ?
+
+Cochez la meilleure solution :
+□ Afficher un message "Votre panier est vide" + lien vers catalogue
+□ Rediriger automatiquement vers /cart
+□ Rediriger automatiquement vers /
+□ Laisser la page vide
+
+Cette solution utilise quel type de composant ?
+Réponse : ________________
+
+Question 2.4 - Props drilling
+Dans App.jsx, vous devez passer des props à CheckoutPage. Modifiez cette ligne :
+
+```jsx
+// AVANT (actuel)
+<Route path="/checkout" element={<CheckoutPage cart={cart} />} />
+
+// APRÈS (vos modifications)
+<Route path="/checkout" element={<CheckoutPage _____________ />} />
+```
+
+Question 2.5 - Création de ShippingPage
+ShippingPage est simple pour ce premier exercice. Quels éléments doit-elle contenir au minimum ?
+
+□ Un titre
+□ Un message informatif
+□ Un lien de navigation retour
+□ Un formulaire de livraison
+□ La liste des articles
+
+ETAPE 3 : INTEGRATION - FINALISATION
+=====================================
+
+Question 3.1 - Nouvelle route
+Dans App.jsx, où devez-vous ajouter la nouvelle route /shipping ?
+
+```jsx
+<Routes>
+    <Route path="/" element={<HomePage ... />} />
+    <Route path="/cart" element={<CartPage ... />} />
+    <Route path="/checkout" element={<CheckoutPage ... />} />
+    {/* Votre nouvelle route ici ? */}
+</Routes>
+```
+
+Écrivez la ligne complète :
+```jsx
+_________________________________________________________________
+```
+
+Question 3.2 - Import des dépendances
+Quels imports devez-vous ajouter dans chaque fichier ?
+
+CheckoutPage.jsx a besoin de :
+□ React
+□ Link (react-router-dom)
+□ useState (react)
+□ useEffect (react)
+
+ShippingPage.jsx a besoin de :
+□ React
+□ Link (react-router-dom)
+
+App.jsx a besoin d'ajouter :
+□ ShippingPage import
+□ Nouvelles props dans CheckoutPage
+□ Nouvelle route /shipping
+
+TESTS DE VALIDATION
+======================
+
+TESTS FONCTIONNELS À EFFECTUER
+-------------------------------
+
+Test 1 : Navigation normale
+1. Aller sur la HomePage (/)
+2. Ajouter 2-3 sneakers au panier
+3. Aller sur la CartPage (/cart) → vérifier articles présents
+4. Cliquer "Passer la commande" → doit aller sur /checkout
+5. Vérifier récapitulatif correct avec calculs
+6. Cliquer "Continuer vers livraison" → doit aller sur /shipping
+7. Cliquer "Retour récapitulatif" → doit retourner sur /checkout
+
+Test 2 : Panier vide
+1. Vider complètement le panier sur /cart
+2. Taper directement /checkout dans l'URL
+3. Vérifier affichage du message "Votre panier est vide" + lien vers catalogue
+
+Test 3 : URLs directes
+1. Taper /checkout avec panier plein → doit fonctionner
+2. Taper /shipping directement → doit fonctionner
+3. Rafraîchir chaque page → doit rester stable
+
+Test 4 : Calculs financiers
+Avec un panier contenant :
+- Sneaker A : 2 unités à 100€ = 200€
+- Sneaker B : 1 unité à 50€ = 50€
+
+Vérifier affichage :
+- Sous-total HT : 250€
+- TVA (20%) : 50€  
+- Total TTC : 300€
+
+CRITERES DE REUSSITE
+--------------------
+
+Niveau 1 - Fonctionnel (minimum requis)
+- CheckoutPage affiche les articles et totaux corrects
+- Navigation vers ShippingPage fonctionne
+- ShippingPage avec titre et lien retour
+- Panier vide affiche un message informatif
+
+Niveau 2 - Professionnel (bien fait)
+- CSS soigné pour les totaux (alignement, lisibilité)
+- Gestion d'erreurs robuste
+- Messages utilisateur clairs
+- Code bien organisé et commenté
+
+Niveau 3 - Expert (excellent travail)
+- Animations de transition
+- Loading states pendant navigation
+- Accessibilité (ARIA labels)
+- Code optimisé et performant
+
+CONSEILS ET BONNES PRATIQUES
+===============================
+
+CONSEILS GÉNÉRAUX
+------------------
+
+1. **Commencez simple** : Faites d'abord fonctionner la base avant d'ajouter du CSS
+2. **Testez au fur et à mesure** : Après chaque modification, vérifiez dans le navigateur
+3. **Utilisez la console** : Regardez les erreurs JavaScript pour déboguer
+4. **Props par étapes** : Ajoutez les props une par une pour identifier les problèmes
+
+PIEGES A EVITER
+----------------
+
+Erreur fréquente 1 : Oublier d'importer Link
+```jsx
+// INCORRECT - navigation ne marche pas
+import React from 'react';
+
+// CORRECT - import complet
+import React from 'react';
+import { Link } from 'react-router-dom';
+```
+
+Erreur fréquente 2 : Calcul TVA incorrect
+```jsx
+// INCORRECT - TVA sur TTC
+const tva = (sousTotal + tva) * 0.20;
+
+// CORRECT - TVA sur HT
+const tva = sousTotal * 0.20;
+```
+
+Erreur fréquente 3 : Props manquantes dans App.jsx
+```jsx
+// INCORRECT - props insuffisantes
+<CheckoutPage cart={cart} />
+
+// CORRECT - toutes les props nécessaires
+<CheckoutPage cart={cart} cartItemsCount={cartItemsCount} />
+```
+
+RESSOURCES UTILES
+------------------
+
+Documentation React Router : https://reactrouter.com/
+DevTools React : Extension navigateur pour déboguer
+Console navigateur : F12 -> Console pour voir les erreurs
+
+APRES L'EXERCICE
+===================
+
+UNE FOIS L'EXERCICE TERMINE, VOUS AUREZ MAITRISE :
+
+- React Router avancé : Nouvelles routes, navigation conditionnelle
+- Props drilling complexe : Transmission de données entre App -> Pages  
+- Logique métier : Calculs financiers, gestion des cas d'erreur
+- Architecture SPA : Séparation claire des responsabilités
+- UX professionnelle : Flow utilisateur cohérent et intuitif
+
+PROCHAINES ETAPES :
+- Cours "Formulaires React" -> Développer ShippingPage complète
+- Cours "Gestion d'état avancée" -> Context API, Redux
+- Cours "Tests unitaires" -> Jest, Testing Library
+
+Bon courage !
+
+ANNEXE - CODES DE REFERENCE (A CONSULTER EN CAS DE BLOCAGE)
+===========================================================
+
+STRUCTURE MINIMALE CHECKOUTPAGE.JSX
+-----------------------------------
+```jsx
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+function CheckoutPage({ cart, cartItemsCount }) {
+    // Calculs financiers
+    const sousTotal = cart.reduce((total, item) => total + (item.prix * item.quantity), 0);
+    const tva = sousTotal * 0.20;
+    const totalTTC = sousTotal + tva;
+    
+    // Si panier vide, afficher message
+    if (cartItemsCount === 0) {
+        return (
+            <div className="checkout-page">
+                <h2>Finaliser votre commande</h2>
+                <p>Votre panier est vide.</p>
+                <Link to="/">Retourner au catalogue</Link>
+            </div>
+        );
+    }
+    
+    return (
+        <div className="checkout-page">
+            <h2>Finaliser votre commande</h2>
+            
+            {/* Nombre d'articles */}
+            <p>Nombre d'articles : {cartItemsCount}</p>
+            
+            {/* Liste des articles */}
+            <div className="order-summary">
+                {cart.map(item => (
+                    <div key={item.id} className="order-line">
+                        <span>{item.nom} x{item.quantity}</span>
+                        <span>{(item.prix * item.quantity).toFixed(2)}€</span>
+                    </div>
+                ))}
+            </div>
+            
+            {/* Totaux */}
+            <div className="order-totals">
+                <div><span>Sous-total HT:</span> <span>{sousTotal.toFixed(2)}€</span></div>
+                <div><span>TVA (20%):</span> <span>{tva.toFixed(2)}€</span></div>
+                <div><strong><span>Total TTC:</span> <span>{totalTTC.toFixed(2)}€</span></strong></div>
+            </div>
+            
+            {/* Navigation */}
+            <div className="checkout-actions">
+                <Link to="/cart">← Retour au panier</Link>
+                <Link to="/shipping">
+                    <button>Continuer vers la livraison →</button>
+                </Link>
+            </div>
+        </div>
+    );
+}
+
+export default CheckoutPage;
+```
+
+STRUCTURE MINIMALE SHIPPINGPAGE.JSX
+-----------------------------------
+```jsx
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+function ShippingPage() {
+    return (
+        <div className="shipping-page">
+            <h2>Informations de livraison</h2>
+            <p>Cette page sera développée dans le prochain cours.</p>
+            <p>Vous apprendrez à créer des formulaires avec validation, gestion d'état et soumission.</p>
+            
+            <div className="shipping-actions">
+                <Link to="/checkout">← Retour au récapitulatif</Link>
+            </div>
+        </div>
+    );
+}
+
+export default ShippingPage;
+```
+
+MODIFICATION APP.JSX - NOUVEAUX IMPORTS
+---------------------------------------
+```jsx
+// Ajouter à vos imports existants
+import ShippingPage from '../Pages/ShippingPage';
+```
+
+MODIFICATION APP.JSX - NOUVELLE ROUTE
+-------------------------------------
+```jsx
+// Ajouter dans vos Routes existantes
+<Route path="/shipping" element={<ShippingPage />} />
+```
+
+MODIFICATION APP.JSX - PROPS CHECKOUTPAGE
+-----------------------------------------
+```jsx
+// Modifier la route CheckoutPage existante
+<Route 
+    path="/checkout" 
+    element={<CheckoutPage cart={cart} cartItemsCount={cartItemsCount} />} 
+/>
+```

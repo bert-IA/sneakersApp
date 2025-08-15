@@ -2,7 +2,7 @@ import { sneakersList } from '../datas/sneakersList';
 import SneakerItem from './SneakerItem';
 import '../styles/ShoppingList.css';
 
-function ShoppingList({onAddToCart}) {
+function ShoppingList({addToCart}) {
     return (
         <div className="shopping-list">
             <h2>Nos Sneakers</h2>
@@ -11,7 +11,7 @@ function ShoppingList({onAddToCart}) {
                     <SneakerItem 
                         key={sneaker.id}
                         sneakerData={sneaker}
-                        onAddToCart={onAddToCart}
+                        addToCart={addToCart}
                     />
                 ))}
             </div>

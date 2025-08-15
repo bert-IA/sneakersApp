@@ -1,39 +1,113 @@
 /* Conteneur principal du banner */
 .banner {
-  display: flex;                    /* Permet d'aligner logo et contenu */
-  align-items: center;              /* Centre verticalement */
-  justify-content: space-between;   /* Espace entre logo et contenu */
-  padding: 5px 40px;              /* Espacement intérieur */
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 15px 40px;
 }
 
-/* Style du logo (à gauche) */
+.banner-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Section logo + titre */
+.banner-brand {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Style du logo */
 .banner-logo {
-  height: 90px;                    /* Taille fixe du logo */
-  width: auto;                     /* Largeur proportionnelle */
-  border-radius: 8px;              /* Coins arrondis */
+  height: 70px;
+  width: auto;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Conteneur du texte (à droite) */
+/* Conteneur du texte */
 .banner-content {
-  text-align: right;               /* Texte aligné à droite */
-  flex-grow: 1;                    /* Prend l'espace restant */
+  text-align: left;
 }
 
 /* Titre principal */
 .banner-content h1 {
-  margin: 0 0 8px 0;               /* Supprime marges par défaut */
-  font-size: 2.8rem;               /* Taille du titre */
+  margin: 0 0 5px 0;
+  font-size: 2.2rem;
   font-weight: bold;
 }
 
 /* Sous-titre/slogan */
 .banner-content p {
-  margin: 0;                       /* Supprime marges par défaut */
-  font-size: 1.5rem;               /* Taille du sous-titre */
-  opacity: 0.7;                    /* Légèrement transparent */
+  margin: 0;
+  font-size: 1.1rem;
+  opacity: 0.8;
   font-style: italic;
+}
+
+/* Navigation */
+.banner-navigation {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .banner {
+    padding: 15px 20px;
+  }
+  
+  .banner-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .banner-brand {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+  
+  .banner-content h1 {
+    font-size: 1.8rem;
+  }
+  
+  .banner-content p {
+    font-size: 1rem;
+  }
+  
+  .banner-navigation {
+    gap: 15px;
+  }
+  
+  .nav-link {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+  }
 }

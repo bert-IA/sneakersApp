@@ -1,0 +1,143 @@
+/* CheckoutPage.css */
+.checkout-page {
+    padding: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #eee;
+}
+
+.page-header h2 {
+    color: #333;
+    font-size: 2.2rem;
+    margin: 0;
+}
+
+.back-to-cart {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 15px;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.back-to-cart:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.empty-checkout {
+    text-align: center;
+    padding: 50px;
+    color: #666;
+}
+
+.empty-checkout p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.checkout-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+}
+
+.order-summary {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.order-summary h3 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+}
+
+.order-items {
+    margin-bottom: 20px;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.item-name {
+    font-weight: 500;
+    flex: 1;
+}
+
+.item-quantity {
+    color: #666;
+    margin: 0 15px;
+}
+
+.item-price {
+    font-weight: bold;
+    color: #28a745;
+}
+
+.order-total {
+    padding-top: 15px;
+    border-top: 2px solid #ddd;
+    text-align: right;
+    font-size: 1.2rem;
+}
+
+.checkout-form {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.checkout-form h3 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+}
+
+.order-button {
+    width: 100%;
+    padding: 15px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: not-allowed;
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .checkout-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+}

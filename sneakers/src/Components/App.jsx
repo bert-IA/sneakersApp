@@ -1,8 +1,10 @@
 
 import {useState, useEffect} from 'react'; // ← IMPORT : permet de gérer l'état dans les composants fonctionnels
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Banner from './Banner'; // ← IMPORT : récupère le composant
-import ShoppingList from './ShoppingList'
-import Cart from './Cart'; // ← IMPORT : récupère le composant du panier
+import HomePage from '../Pages/HomePage';     // ← NOUVEAU : page d'accueil
+import CartPage from '../Pages/CartPage';     // ← NOUVEAU : page panier  
+import CheckoutPage from '../Pages/CheckoutPage'; // ← NOUVEAU : page commande
 import '../styles/App.css';
 
 function App() {
@@ -38,8 +40,7 @@ function App() {
     };
 
     const removeFromCart = (sneaker) => {
-        console.log('🗑️ removeFromCart appelée avec:', sneaker);
-        console.log('📦 État actuel du panier:', cart);
+        
         setCart(prevCart => {
             const existingItem = prevCart.find(item => item.id === sneaker.id);
             if (existingItem) {
@@ -63,22 +64,37 @@ function App() {
         setCart([]); // Réinitialise le panier
     }
 
+    // Calcul du nombre d'articles dans le panier
+    const cartItemsCount = cart.reduce((total, item) => total + item.quantity, 0);
+
     return (
-        <div className="App">
-            <Banner />
-            <div className="main-content">
-                <div className="shopping-section">
-                    <ShoppingList onAddToCart={addToCart} />
-                </div>
-                <div className="cart-section">
-                    <Cart 
-                    cartItems={cart} 
-                    onRemoveFromCart={removeFromCart}
-                    onClearCart={clearCart}
-                    />
+        <BrowserRouter>
+            <div className="App">
+                <Banner cartItemsCount={cartItemsCount} />
+                <div className="main-content">
+                    <Routes>
+                        <Route 
+                            path="/" 
+                            element={<HomePage cart={cart} addToCart={addToCart} />} 
+                        />
+                        <Route 
+                            path="/cart" 
+                            element={
+                                <CartPage 
+                                    cart={cart} 
+                                    removeFromCart={removeFromCart}
+                                    clearCart={clearCart}
+                                />
+                            } 
+                        />
+                        <Route 
+                            path="/checkout" 
+                            element={<CheckoutPage cart={cart} cartItemsCount={cartItemsCount} />} 
+                        />
+                    </Routes>
                 </div>
             </div>
-        </div>
+        </BrowserRouter>
     );
 }
 

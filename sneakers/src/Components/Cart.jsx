@@ -1,16 +1,16 @@
 import '../styles/Cart.css';
 
-function Cart({ cartItems, onRemoveFromCart, onClearCart }) {
+function Cart({ cartItems, removeFromCart, clearCart }) {
     console.log('🏪 Cart rendu avec props:');
     console.log('   - cartItems:', cartItems);
-    console.log('   - onRemoveFromCart:', onRemoveFromCart);
+    console.log('   - removeFromCart:', removeFromCart);
     const totalItems= cartItems.reduce((sum, item) =>
         sum + item.quantity,0)
     const totalPrice = cartItems.reduce((sum, item) => 
         sum + (item.prix * item.quantity),0);
 
     const handleRemoveFromCart = (itemToRemove) => {
-        onRemoveFromCart(itemToRemove);
+        removeFromCart(itemToRemove);
     }
 
     if (cartItems.length === 0) {
@@ -61,7 +61,7 @@ function Cart({ cartItems, onRemoveFromCart, onClearCart }) {
             </div>
             <div className="cart-actions">
                 <button 
-                    onClick={onClearCart}
+                    onClick={clearCart}
                     className="clear-cart-btn"
                 >
                     Vider le panier

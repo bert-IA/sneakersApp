@@ -1,0 +1,27 @@
+/* HomePage.css */
+.homepage {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.page-header h2 {
+    color: #333;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.page-header p {
+    color: #666;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.shopping-section {
+    margin-top: 30px;
+}

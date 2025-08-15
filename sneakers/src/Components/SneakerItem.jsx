@@ -2,7 +2,7 @@ import { useState } from 'react';  // Import du hook useState pour gérer l'éta
 import CustomerReview from './CustomerReview';  // Import du composant CustomerReview pour afficher les avis
 import '../styles/SneakerItem.css';  // Import du CSS pour le style du composant
 
-function SneakerItem({ sneakerData, onAddToCart }) {
+function SneakerItem({ sneakerData, addToCart }) {
     // ÉTAT LOCAL : gère l'affichage/masquage des avis détaillés
     const [showReviews, setShowReviews] = useState(false);
     
@@ -17,7 +17,7 @@ function SneakerItem({ sneakerData, onAddToCart }) {
     // GESTIONNAIRE D'ÉVÉNEMENT : envoie les données du sneaker vers App via ShoppingList
     const handleAddToCart = () => {
         console.log('🛒 Données transmises:', sneakerData);  // ← Ajout pour vérification
-        onAddToCart(sneakerData);  // Appelle la fonction reçue en props, qui remonte via ShoppingList jusqu'à App
+        addToCart(sneakerData);  // Appelle la fonction reçue en props, qui remonte via ShoppingList jusqu'à App
     };
     
     return (
@@ -64,34 +64,4 @@ function SneakerItem({ sneakerData, onAddToCart }) {
 
 // Export du composant pour pouvoir l'importer dans d'autres fichiers
 export default SneakerItem;
-
-/*
-RÉSUMÉ DU COMPOSANT SneakerItem :
-
-RESPONSABILITÉS :
-- Affiche les informations d'un sneaker individual (nom, prix, image, etc.)
-- Gère l'interaction utilisateur (boutons cliquables)
-- Communique avec le parent via les callbacks (onAddToCart)
-- Maintient un état local pour l'affichage des avis
-
-PROPS REÇUES :
-- sneakerData : objet contenant toutes les infos du produit
-- onAddToCart : fonction callback pour ajouter au panier
-
-ÉTAT LOCAL :
-- showReviews : boolean pour afficher/masquer les avis détaillés
-
-FONCTIONNALITÉS :
-- Affichage conditionnel du badge "best-seller" 
-- Bouton "Ajouter au panier" qui communique avec App
-- Toggle des avis avec état local
-- Utilisation de composants enfants (CustomerReview)
-
-CONCEPTS REACT UTILISÉS :
-- Props et destructuring
-- useState hook
-- Event handlers
-- Rendu conditionnel (&&, ternaire)
-- Communication enfant → parent via callbacks
-*/
 
