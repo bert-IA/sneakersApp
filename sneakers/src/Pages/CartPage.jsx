@@ -10,11 +10,13 @@ function CartPage({ cart, removeFromCart, clearCart }) {
                 removeFromCart={removeFromCart}
                 clearCart={clearCart}
             />
+            
             {/* Affichage conditionnel : bouton "Commander" uniquement si le panier contient des articles */}
             {cart.length > 0 && (
                 <div className="checkout-section">
                     <Link to="/checkout" className="checkout-button">
-                        Passer la commande
+                        <span className="btn-text">Passer la commande</span>
+                        <span className="btn-icon">→</span>
                     </Link>
                 </div>
             )}

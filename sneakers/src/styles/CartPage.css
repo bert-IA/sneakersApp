@@ -1,68 +1,72 @@
-/* CartPage.css */
+/* CartPage.css - Design cohérent avec CheckoutPage */
 .cart-page {
-    padding: 20px;
-    max-width: 800px;
+    padding: 10px;
+    max-width: 1200px;
     margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
-.page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid #eee;
-}
-
-.page-header h2 {
-    color: #333;
-    font-size: 2.2rem;
-    margin: 0;
-}
-
-.continue-shopping {
-    color: #007bff;
-    text-decoration: none;
-    font-weight: 500;
-    padding: 8px 15px;
-    border: 1px solid #007bff;
-    border-radius: 4px;
-    transition: all 0.3s;
-}
-
-.continue-shopping:hover {
-    background-color: #007bff;
-    color: white;
-}
-
-/* Section pour le bouton "Passer commande" en haut */
-.checkout-section-top {
-    margin-bottom: 5px;
-    text-align: center;
-    padding-bottom: 5px;
-}
-
-/* Section pour le bouton "Passer commande" */
+/* ============= SECTION CHECKOUT ============= */
 .checkout-section {
-    margin-top: 30px;
-    text-align: center;
-    padding-top: 20px;
-    border-top: 2px solid #eee;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
 }
 
 .checkout-button {
-    background: linear-gradient(45deg, #28a745, #20c997);
-    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
     text-decoration: none;
-    padding: 15px 30px;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    transition: all 0.3s;
-    display: inline-block;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    box-shadow: 0 3px 12px rgba(0, 123, 255, 0.3);
+    justify-content: center;
 }
 
 .checkout-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+}
+
+.btn-icon {
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.checkout-button:hover .btn-icon {
+    transform: translateX(3px);
+}
+
+/* ============= RESPONSIVE ============= */
+@media (max-width: 768px) {
+    .cart-page {
+        padding: 10px;
+    }
+    
+    .page-header {
+        padding: 15px;
+    }
+    
+    .page-header h2 {
+        font-size: 1.8rem;
+    }
+    
+    .checkout-button {
+        justify-content: center;
+        padding: 15px;
+    }
 }

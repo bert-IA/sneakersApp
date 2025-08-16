@@ -13,8 +13,14 @@ function Cart({ cartItems, removeFromCart, clearCart }) {
     if (cartItems.length === 0) {
     return (
         <div className="cart">
-        <h2>Mon Panier</h2>
-        <p className="empty-cart">Votre panier est vide</p>
+            <div className="cart-header">
+                <h2>Mon Panier</h2>
+            </div>
+            <div className="empty-cart">
+                <div className="empty-cart-icon">🛒</div>
+                <h3>Votre panier est vide</h3>
+                <p>Découvrez notre collection de sneakers et ajoutez vos modèles préférés !</p>
+            </div>
         </div>
         );
     }   
