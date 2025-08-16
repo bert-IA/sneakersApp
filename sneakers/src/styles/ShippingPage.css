@@ -1,0 +1,196 @@
+/* ShippingPage.css - Design moderne et cohérent */
+.shipping-page {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header de la page */
+.page-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.page-header h2 {
+    color: #2c3e50;
+    font-size: 2.2rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Contenu principal */
+.shipping-content {
+    margin-bottom: 40px;
+}
+
+.info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Notice de développement */
+.development-notice {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.development-notice::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(180deg); }
+}
+
+.development-notice h3 {
+    font-size: 1.6rem;
+    margin-bottom: 15px;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+}
+
+.development-notice p {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    opacity: 0.9;
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+}
+
+/* Preview des fonctionnalités */
+.features-preview {
+    background-color: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.features-preview h4 {
+    color: #2c3e50;
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.features-preview h4::before {
+    content: '🚀';
+    font-size: 1.4rem;
+}
+
+.features-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 15px;
+}
+
+.features-list li {
+    background-color: #f8f9fa;
+    padding: 15px 20px;
+    border-radius: 8px;
+    border-left: 4px solid #28a745;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #2c3e50;
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+.features-list li:hover {
+    transform: translateX(10px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+    background-color: #e8f5e8;
+}
+
+.features-list li:nth-child(1) { border-left-color: #007bff; }
+.features-list li:nth-child(2) { border-left-color: #fd7e14; }
+.features-list li:nth-child(3) { border-left-color: #28a745; }
+.features-list li:nth-child(4) { border-left-color: #dc3545; }
+
+.features-list li:nth-child(1):hover { background-color: #e3f2fd; box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2); }
+.features-list li:nth-child(2):hover { background-color: #fff3e0; box-shadow: 0 4px 12px rgba(253, 126, 20, 0.2); }
+.features-list li:nth-child(4):hover { background-color: #f8d7da; box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2); }
+
+/* Actions */
+.shipping-actions {
+    text-align: center;
+    padding: 25px;
+    background-color: #f8f9fa;
+    border-radius: 12px;
+}
+
+/* Bouton de retour */
+.btn-secondary {
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    border: 2px solid #dee2e6;
+    cursor: pointer;
+    display: inline-block;
+    background-color: transparent;
+    color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #e9ecef;
+    color: #495057;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: #adb5bd;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .shipping-page {
+        padding: 15px;
+    }
+    
+    .development-notice {
+        padding: 25px 20px;
+    }
+    
+    .development-notice h3 {
+        font-size: 1.4rem;
+    }
+    
+    .features-list {
+        gap: 12px;
+    }
+    
+    .features-list li {
+        padding: 12px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .features-list li:hover {
+        transform: translateX(5px);
+    }
+}
