@@ -1,9 +1,6 @@
 import '../styles/Cart.css';
 
 function Cart({ cartItems, removeFromCart, clearCart }) {
-    console.log('🏪 Cart rendu avec props:');
-    console.log('   - cartItems:', cartItems);
-    console.log('   - removeFromCart:', removeFromCart);
     const totalItems= cartItems.reduce((sum, item) =>
         sum + item.quantity,0)
     const totalPrice = cartItems.reduce((sum, item) => 
@@ -41,8 +38,6 @@ function Cart({ cartItems, removeFromCart, clearCart }) {
                         <div className="sneaker-action">
                             <button 
                                 onClick={() => {
-                                    console.log('🖱️ Clic sur le bouton supprimer');
-                                    console.log('📦 Item à supprimer:', item);
                                     handleRemoveFromCart(item);
                                 }} 
                                 className="remove-from-cart"

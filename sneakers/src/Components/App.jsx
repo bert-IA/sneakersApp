@@ -5,6 +5,7 @@ import Banner from './Banner'; // ← IMPORT : récupère le composant
 import HomePage from '../Pages/HomePage';     // ← NOUVEAU : page d'accueil
 import CartPage from '../Pages/CartPage';     // ← NOUVEAU : page panier  
 import CheckoutPage from '../Pages/CheckoutPage'; // ← NOUVEAU : page commande
+import ShippingPage from '../Pages/ShippingPage';
 import '../styles/App.css';
 
 function App() {
@@ -75,7 +76,10 @@ function App() {
                     <Routes>
                         <Route 
                             path="/" 
-                            element={<HomePage cart={cart} addToCart={addToCart} />} 
+                            element={
+                            <HomePage 
+                                cart={cart} 
+                                addToCart={addToCart} />} 
                         />
                         <Route 
                             path="/cart" 
@@ -89,7 +93,15 @@ function App() {
                         />
                         <Route 
                             path="/checkout" 
-                            element={<CheckoutPage cart={cart} cartItemsCount={cartItemsCount} />} 
+                            element={
+                                <CheckoutPage 
+                                    cart={cart} 
+                                    cartItemsCount={cartItemsCount} />} 
+                        />
+                        <Route
+                            path="/shipping"
+                            element={
+                                <ShippingPage />}
                         />
                     </Routes>
                 </div>

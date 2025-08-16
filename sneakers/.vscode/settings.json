@@ -1,0 +1,17 @@
+{
+    "typescript.preferences.quoteStyle": "single",
+    "typescript.preferences.includePackageJsonAutoImports": "off",
+    "typescript.suggest.autoImports": false,
+    "typescript.validate.enable": true,
+    "javascript.validate.enable": true,
+    "eslint.enable": true,
+    "eslint.run": "onType",
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "never"
+    },
+    "problems.decorations.enabled": true,
+    "editor.inlineHints.enabled": "on",
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000
+}
