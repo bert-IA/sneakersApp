@@ -20,7 +20,7 @@ function CheckoutPage({ cart, cartItemsCount }) {
     
     return (
         <div className='checkout-page'>
-            <div className="page-header">
+            <div className="checkout-header">
                 <h2>Finaliser la commande</h2>
             </div>
             
