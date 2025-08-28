@@ -52,6 +52,11 @@ function ShippingForm({ onShippingComplete }) {
             errors.postalCode = 'Code postal invalide';
         }
         
+        const phoneRegex = /^[0-9\s\-\+\(\)]{10,}$/;
+        if (!phoneRegex.test(data.phone)) {
+            errors.phone = 'Téléphone invalide (minimum 10 chiffres)';
+        }
+
         return errors;
     };
 
@@ -141,6 +146,22 @@ function ShippingForm({ onShippingComplete }) {
                             <span className="error-text">{errors.email}</span>
                         }
                     </div>
+
+                        <div className="form-group">
+                        <label htmlFor="phone">Téléphone *</label>
+                        <input 
+                            id="phone"
+                            name="phone"
+                            type="tel"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            disabled={isSubmitting}
+                        />
+                        {errors.phone && 
+                            <span className="error-text">{errors.phone}</span>
+                        }
+                    </div>
+
                 </fieldset>
 
                 <fieldset>
