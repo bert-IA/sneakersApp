@@ -1,17 +1,19 @@
-import { Link } from "react-router-dom";
 import '../styles/ShippingPage.css';
-import {useState} from 'react';
+import { useState } from 'react';
+
+// Composant réutilisable pour l'affichage des erreurs
+const ErrorMessage = ({ error }) => (
+    error ? <span className="error-text">{error}</span> : null
+);
 
 function ShippingForm({ onShippingComplete }) {
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
         email: '',
-        phone: '',
         address: '',
         city: '',
         postalCode: '',
-        country: 'France',
         deliveryOptions: 'standard',
         newsletter: false
     });
@@ -20,13 +22,27 @@ function ShippingForm({ onShippingComplete }) {
     const [errors, setErrors] = useState({});
     const [success, setSuccess] = useState(false);
 
+    // Handler universel pour les champs simples et imbriqués d'un niveau
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: type === 'checkbox' ? checked : value
-        }));
-        
+        // Si le name contient un point, on gère une propriété imbriquée (ex: additionalServices.assembly)
+        if (name.includes('.')) {
+            const [parent, child] = name.split('.'); // Sépare le parent et l'enfant
+            setFormData(prev => ({
+                ...prev,
+                [parent]: {
+                    ...prev[parent],
+                    [child]: type === 'checkbox' ? checked : value // Met à jour la propriété enfant
+                }
+            }));
+        } else {
+            // Sinon, on gère une propriété simple
+            setFormData(prev => ({
+                ...prev,
+                [name]: type === 'checkbox' ? checked : value
+            }));
+        }
+        // Réinitialise l'erreur du champ si elle existe
         if (errors[name]) {
             setErrors(prev => ({ ...prev, [name]: '' }));
         }
@@ -41,7 +57,7 @@ function ShippingForm({ onShippingComplete }) {
         if (!data.address.trim()) errors.address = 'Adresse requise';
         if (!data.city.trim()) errors.city = 'Ville requise';
         if (!data.postalCode.trim()) errors.postalCode = 'Code postal requis';
-        
+
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (data.email && !emailRegex.test(data.email)) {
             errors.email = 'Format email invalide';
@@ -52,6 +68,7 @@ function ShippingForm({ onShippingComplete }) {
             errors.postalCode = 'Code postal invalide';
         }
         
+
         return errors;
     };
 
@@ -74,7 +91,7 @@ function ShippingForm({ onShippingComplete }) {
             onShippingComplete?.(formData);
             
         } catch (error) {
-            setErrors({ general: 'Erreur lors de l\'envoi' });
+            setErrors({ general: "Erreur lors de l'envoi" });
         } finally {
             setIsSubmitting(false);
         }
@@ -107,9 +124,7 @@ function ShippingForm({ onShippingComplete }) {
                             onChange={handleChange}
                             disabled={isSubmitting}
                         />
-                        {errors.firstName && 
-                            <span className="error-text">{errors.firstName}</span>
-                        }
+                        <ErrorMessage error={errors.firstName} />
                     </div>
                     
                     <div className="form-group">
@@ -122,9 +137,7 @@ function ShippingForm({ onShippingComplete }) {
                             onChange={handleChange}
                             disabled={isSubmitting}
                         />
-                        {errors.lastName && 
-                            <span className="error-text">{errors.lastName}</span>
-                        }
+                        <ErrorMessage error={errors.lastName} />
                     </div>
                     
                     <div className="form-group">
@@ -137,10 +150,10 @@ function ShippingForm({ onShippingComplete }) {
                             onChange={handleChange}
                             disabled={isSubmitting}
                         />
-                        {errors.email && 
-                            <span className="error-text">{errors.email}</span>
-                        }
+                        <ErrorMessage error={errors.email} />
                     </div>
+
+
                 </fieldset>
 
                 <fieldset>
@@ -156,9 +169,7 @@ function ShippingForm({ onShippingComplete }) {
                             onChange={handleChange}
                             disabled={isSubmitting}
                         />
-                        {errors.address && 
-                            <span className="error-text">{errors.address}</span>
-                        }
+                        <ErrorMessage error={errors.address} />
                     </div>
                     
                     <div className="form-group">
@@ -171,9 +182,7 @@ function ShippingForm({ onShippingComplete }) {
                             onChange={handleChange}
                             disabled={isSubmitting}
                         />
-                        {errors.city && 
-                            <span className="error-text">{errors.city}</span>
-                        }
+                        <ErrorMessage error={errors.city} />
                     </div>
                     
                     <div className="form-group">
@@ -187,9 +196,7 @@ function ShippingForm({ onShippingComplete }) {
                             maxLength={5}
                             disabled={isSubmitting}
                         />
-                        {errors.postalCode && 
-                            <span className="error-text">{errors.postalCode}</span>
-                        }
+                        <ErrorMessage error={errors.postalCode} />
                     </div>
                 </fieldset>
 
@@ -221,26 +228,30 @@ function ShippingForm({ onShippingComplete }) {
                             Livraison express (24h) - 9,99€
                         </label>
                     </div>
-                </fieldset>
 
+
+                </fieldset>
                 <fieldset>
                     <legend>Préférences</legend>
-                    
-                    <label>
-                        <input 
-                            name="newsletter"
-                            type="checkbox"
-                            checked={formData.newsletter}
-                            onChange={handleChange}
-                            disabled={isSubmitting}
-                        />
+
+                    <div className="form-group">
+                        <label htmlFor="newsletter"></label>
+                            <input 
+                                id="newsletter"
+                                name="newsletter"
+                                type="checkbox"
+                                checked={formData.newsletter}
+                                onChange={handleChange}
+                                disabled={isSubmitting}
+                            />
                         S'abonner à notre newsletter
-                    </label>
+                    
+                    </div>
                 </fieldset>
 
                 {errors.general && (
                     <div className="error-banner">
-                        {errors.general}
+                        <ErrorMessage error={errors.general} />
                     </div>
                 )}
 
