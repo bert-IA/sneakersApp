@@ -101,7 +101,9 @@ function App() {
                         <Route
                             path="/shipping"
                             element={
-                                <ShippingPage />}
+                                <ShippingPage 
+                                    clearCart={clearCart}
+                                />}
                         />
                     </Routes>
                 </div>

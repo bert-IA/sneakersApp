@@ -6,7 +6,7 @@ const ErrorMessage = ({ error }) => (
     error ? <span className="error-text">{error}</span> : null
 );
 
-function ShippingForm({ onShippingComplete }) {
+function ShippingForm({ onShippingComplete , clearCart }) {
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -107,6 +107,7 @@ function ShippingForm({ onShippingComplete }) {
             await new Promise(resolve => setTimeout(resolve, 1000));
             
             setSuccess(true);
+            clearCart(); // Vide le panier juste après la validation
             onShippingComplete?.(formData);
             
         } catch (error) {
