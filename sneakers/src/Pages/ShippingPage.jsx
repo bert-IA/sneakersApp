@@ -77,7 +77,7 @@ function ShippingForm({ onShippingComplete }) {
         }
         
         const phoneRegex = /^[0-9\s\-+()]{10,}$/;
-        if (!phoneRegex.test(data.phone)) {
+        if (data.phone && !phoneRegex.test(data.phone)) {
             errors.phone = 'Téléphone invalide (minimum 10 chiffres)';
         }
 
@@ -166,7 +166,7 @@ function ShippingForm({ onShippingComplete }) {
                     </div>
 
                         <div className="form-group">
-                        <label htmlFor="phone">Téléphone *</label>
+                        <label htmlFor="phone">Téléphone</label>
                         <input 
                             id="phone"
                             name="phone"
