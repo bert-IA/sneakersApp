@@ -285,7 +285,38 @@
     background: linear-gradient(135deg, #e9ecef 0%, #f8f9fa 100%);
     color: #495057;
     transform: translateY(-2px);
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+}
+
+.order-options > div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.05rem;
+    color: #2c3e50;
+    font-weight: 500;
+    padding: 6px 0;
+    border-bottom: 1px dashed #b6c6e3;
+}
+.order-options > div:last-child {
+    border-bottom: none;
+}
+
+.order-options span:first-child::before {
+    content: '\1F4E6'; /* 📦 pour livraison */
+    margin-right: 6px;
+    color: #007bff;
+    font-size: 1.1em;
+    vertical-align: middle;
+}
+.order-options > div:not(:first-child) span:first-child::before {
+    content: '\2714'; /* ✔️ pour services */
+    color: #28a745;
+    margin-right: 6px;
+}
+.order-options span:last-child {
+    margin-left: auto;
+    color: #007bff;
+    font-weight: 600;
 }
 
 .btn-icon {

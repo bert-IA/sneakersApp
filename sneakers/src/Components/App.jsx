@@ -6,6 +6,7 @@ import HomePage from '../Pages/HomePage';     // ← NOUVEAU : page d'accueil
 import CartPage from '../Pages/CartPage';     // ← NOUVEAU : page panier  
 import CheckoutPage from '../Pages/CheckoutPage'; // ← NOUVEAU : page commande
 import ShippingPage from '../Pages/ShippingPage';
+import ConfirmationPage from '../Pages/ConfirmationPage';
 import '../styles/App.css';
 
 function App() {
@@ -68,6 +69,36 @@ function App() {
     // Calcul du nombre d'articles dans le panier
     const cartItemsCount = cart.reduce((total, item) => total + item.quantity, 0);
 
+    // Ajout du state pour stocker les choix de livraison et services
+    const [shippingChoices, setShippingChoices] = useState({
+        deliveryOptions: 'standard',
+        additionalServices: {
+            assembly: false,
+            giftWrap: false,
+            insurance: false
+        }
+    });
+
+    // Handler appelé à la validation du formulaire ShippingPage
+    const handleShippingComplete = (formData) => {
+        setShippingChoices({
+            deliveryOptions: formData.deliveryOptions,
+            additionalServices: formData.additionalServices
+        });
+    };
+
+    // Fonction pour réinitialiser les infos de livraison
+    const clearShipping = () => {
+        setShippingChoices({
+            deliveryOptions: 'standard',
+            additionalServices: {
+                assembly: false,
+                giftWrap: false,
+                insurance: false
+            }
+        });
+    };
+
     return (
         <BrowserRouter>
             <div className="App">
@@ -96,14 +127,28 @@ function App() {
                             element={
                                 <CheckoutPage 
                                     cart={cart} 
-                                    cartItemsCount={cartItemsCount} />} 
+                                    cartItemsCount={cartItemsCount}
+                                    selectedDelivery={shippingChoices.deliveryOptions}
+                                    selectedServices={shippingChoices.additionalServices}
+                                    clearCart={clearCart}
+                                />}
                         />
                         <Route
                             path="/shipping"
                             element={
                                 <ShippingPage 
                                     clearCart={clearCart}
+                                    onShippingComplete={handleShippingComplete}
                                 />}
+                        />
+                        <Route
+                            path="/confirmation"
+                            element={
+                                <ConfirmationPage
+                                    clearCart={clearCart}
+                                    clearShipping={clearShipping}
+                                />
+                            }
                         />
                     </Routes>
                 </div>

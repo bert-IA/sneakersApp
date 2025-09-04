@@ -1,12 +1,15 @@
 import '../styles/ShippingPage.css';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ADDITIONAL_SERVICES } from '../datas/orderOptions';
 
 // Composant réutilisable pour l'affichage des erreurs
 const ErrorMessage = ({ error }) => (
     error ? <span className="error-text">{error}</span> : null
 );
 
-function ShippingForm({ onShippingComplete , clearCart }) {
+function ShippingForm({ onShippingComplete, clearCart }) {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -28,7 +31,6 @@ function ShippingForm({ onShippingComplete , clearCart }) {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({});
-    const [success, setSuccess] = useState(false);
 
     // Handler universel pour les champs simples et imbriqués d'un niveau
     const handleChange = (e) => {
@@ -103,13 +105,15 @@ function ShippingForm({ onShippingComplete , clearCart }) {
                 setErrors(validationErrors);
                 return;
             }
-            
+
             await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            setSuccess(true);
-            clearCart(); // Vide le panier juste après la validation
-            onShippingComplete?.(formData);
-            
+
+            if (onShippingComplete) {
+                onShippingComplete(formData);
+            }
+            // Redirection vers la synthèse finale
+            navigate('/checkout');
+
         } catch (error) {
             setErrors({ general: "Erreur lors de l'envoi" });
         } finally {
@@ -117,14 +121,7 @@ function ShippingForm({ onShippingComplete , clearCart }) {
         }
     };
 
-    if (success) {
-        return (
-            <div className="success-message">
-                <h2>Commande confirmée !</h2>
-                <p>Vos informations de livraison ont été enregistrées.</p>
-            </div>
-        );
-    }
+    // Suppression du message de succès : la redirection s'en charge
 
     return (
         <div className="shipping-form">
@@ -303,46 +300,44 @@ function ShippingForm({ onShippingComplete , clearCart }) {
                 </fieldset>
                 <fieldset>
                     <legend>Services additionnels</legend>
+
                     <div className="form-group">
                         <label htmlFor="assembly"></label>
-                            <input 
-                                id="assembly"
-                                name="additionalServices.assembly"
-                                type="checkbox"
-                                checked={formData.additionalServices.assembly}
-                                onChange={handleChange}
-                                disabled={isSubmitting}
-                            />
-                            Montage à domicile (+105,00€)
-                        
+                        <input 
+                            id="assembly"
+                            name="additionalServices.assembly"
+                            type="checkbox"
+                            checked={formData.additionalServices.assembly}
+                            onChange={handleChange}
+                            disabled={isSubmitting}
+                        />
+                        {`${ADDITIONAL_SERVICES.assembly.label} (+${ADDITIONAL_SERVICES.assembly.price},00€)`}
                     </div>
-                    
+
                     <div className="form-group">
                         <label htmlFor="giftWrap"></label>
-                            <input 
-                                id="giftWrap"
-                                name="additionalServices.giftWrap"
-                                type="checkbox"
-                                checked={formData.additionalServices.giftWrap}
-                                onChange={handleChange}
-                                disabled={isSubmitting}
-                            />
-                            Emballage cadeau (+5,00€)
-                        
-                    
+                        <input 
+                            id="giftWrap"
+                            name="additionalServices.giftWrap"
+                            type="checkbox"
+                            checked={formData.additionalServices.giftWrap}
+                            onChange={handleChange}
+                            disabled={isSubmitting}
+                        />
+                        {`${ADDITIONAL_SERVICES.giftWrap.label} (+${ADDITIONAL_SERVICES.giftWrap.price},00€)`}
                     </div>
+
                     <div className="form-group">
                         <label htmlFor="insurance"></label>
-                            <input 
-                                id="insurance"
-                                name="additionalServices.insurance"
-                                type="checkbox"
-                                checked={formData.additionalServices.insurance}
-                                onChange={handleChange}
-                                disabled={isSubmitting}
-                            />
-                            Assurance livraison (+15,00€)
-                        
+                        <input 
+                            id="insurance"
+                            name="additionalServices.insurance"
+                            type="checkbox"
+                            checked={formData.additionalServices.insurance}
+                            onChange={handleChange}
+                            disabled={isSubmitting}
+                        />
+                        {`${ADDITIONAL_SERVICES.insurance.label} (+${ADDITIONAL_SERVICES.insurance.price},00€)`}
                     </div>
 
                 </fieldset>
