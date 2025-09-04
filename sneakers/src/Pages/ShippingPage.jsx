@@ -82,9 +82,9 @@ function ShippingForm({ onShippingComplete }) {
         const phoneRegex = /^[0-9\s\-+()]{10,}$/;
         if (!phoneRegex.test(data.phone)) {
             errors.phone = 'Téléphone invalide (minimum 10 chiffres)';
-        }
-        if (data.specialInstructions && data.specialInstructions.length > 200) {
-        errors.specialInstructions = 'Instructions trop longues (max 200 caractères)';
+            }
+            if (data.specialInstructions && data.specialInstructions.length > 200) {
+                errors.specialInstructions = 'Instructions trop longues (max 200 caractères)';
         }
     }
 
@@ -180,6 +180,7 @@ function ShippingForm({ onShippingComplete }) {
                             type="tel"
                             value={formData.phone}
                             onChange={handleChange}
+                            placeholder='0634128950'
                             disabled={isSubmitting}
                         />
                         <ErrorMessage error={errors.phone} />
