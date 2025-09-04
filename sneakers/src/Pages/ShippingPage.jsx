@@ -16,6 +16,7 @@ function ShippingForm({ onShippingComplete }) {
         city: '',
         postalCode: '',
         deliveryOptions: 'standard',
+        specialInstructions: '',
         deliveryTime: '',
         additionalServices: {
             assembly: false,
@@ -76,13 +77,19 @@ function ShippingForm({ onShippingComplete }) {
             errors.postalCode = 'Code postal invalide';
         }
         
+        
+        if (data.phone && data.phone.trim()) {
         const phoneRegex = /^[0-9\s\-+()]{10,}$/;
-        if (data.phone && !phoneRegex.test(data.phone)) {
+        if (!phoneRegex.test(data.phone)) {
             errors.phone = 'Téléphone invalide (minimum 10 chiffres)';
         }
+        if (data.specialInstructions && data.specialInstructions.length > 200) {
+        errors.specialInstructions = 'Instructions trop longues (max 200 caractères)';
+        }
+    }
 
-        return errors;
-    };
+    return errors;
+};
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -253,6 +260,26 @@ function ShippingForm({ onShippingComplete }) {
                         </label>
                     </div>
 
+                    {formData.deliveryOptions==="express" && (
+                        <div className="form-group">
+                            <label htmlFor="specialInstructions">Instructions spéciales</label>
+                            <textarea
+                                id="specialInstructions"
+                                name="specialInstructions"
+                                value={formData.specialInstructions}
+                                onChange={handleChange}
+                                placeholder="code d'accès, étage, précisions..."
+                                maxLength={200}
+                                rows={4}
+                                disabled={isSubmitting}
+                            />
+                        <small className="char-count">
+                        {formData.specialInstructions.length}/200 caractères
+                        </small>
+
+                        <ErrorMessage error={errors.specialInstructions} />
+                        </div>
+                    )}
                     <div className="form-group">
                     <label htmlFor="deliveryTime">Créneau de livraison</label>
                     <select

@@ -133,6 +133,25 @@ button[type="submit"]:disabled {
     border-radius: 4px;
 }
 
+textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 80px;
+}
+
+.char-count {
+    display: block;
+    text-align: right;
+    color: #666;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+}
+
 /* Media queries pour l'optimisation de la hauteur */
 @media (max-height: 800px) {
     .shipping-form {
