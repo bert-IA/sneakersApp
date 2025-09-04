@@ -1,34 +1,21 @@
 import { Link } from 'react-router-dom';
 import '../styles/CheckoutPage.css';
-import { DELIVERY_OPTIONS, ADDITIONAL_SERVICES } from '../datas/orderOptions';
+// On n'affiche plus les options ni le total final ici
 
 
 // On attend en props : cart, cartItemsCount, selectedDelivery, selectedServices
 import { useNavigate } from 'react-router-dom';
 
-function CheckoutPage({ cart, cartItemsCount, selectedDelivery = 'standard', selectedServices = {}, clearCart }) {
+function CheckoutPage({ cart, cartItemsCount }) {
     // Calcul du sous-total panier
     const sousTotal = cart.reduce((total, item) => total + (item.prix * item.quantity), 0);
-    // Prix livraison
-    const deliveryPrice = DELIVERY_OPTIONS[selectedDelivery]?.price || 0;
-    // Prix services additionnels
-    const servicesPrice = Object.entries(selectedServices)
-        .filter(([key, isChecked]) => isChecked)
-        .reduce((sum, [key]) => sum + (ADDITIONAL_SERVICES[key]?.price || 0), 0);
-
-    // Total général
-    const totalHT = (sousTotal + deliveryPrice + servicesPrice) / 1.2;
-    const tva = (sousTotal + deliveryPrice + servicesPrice) - totalHT;
-    const totalTTC = sousTotal + deliveryPrice + servicesPrice;
-
-    // Détection : l'utilisateur a-t-il déjà rempli la livraison ?
-    const hasShippingInfo = selectedDelivery !== 'standard' || Object.values(selectedServices).some(v => v);
-
+    // Affichage d'un total TTC simple (panier uniquement)
+    const totalTTC = sousTotal;
     const navigate = useNavigate();
 
-    // Handler pour valider la commande : redirige vers la page de confirmation
-    const handleOrderValidation = () => {
-        navigate('/confirmation');
+    // Handler pour continuer vers la livraison
+    const handleGoToShipping = () => {
+        navigate('/shipping');
     };
 
     if (cartItemsCount === 0) {
@@ -47,13 +34,12 @@ function CheckoutPage({ cart, cartItemsCount, selectedDelivery = 'standard', sel
     return (
         <div className='checkout-page'>
             <div className="checkout-header">
-                <h2>{hasShippingInfo ? 'Récapitulatif de la commande' : 'Finaliser la commande'}</h2>
+                <h2>Récapitulatif du panier</h2>
             </div>
-
             <div className="checkout-content">
                 <div className='order-summary'>
                     <div className="summary-header">
-                        <h3>Récapitulatif de votre commande</h3>
+                        <h3>Votre panier</h3>
                         <div className="summary-stats">
                             <span className="total-items">{cartItemsCount} produit{cartItemsCount > 1 ? 's' : ''}</span>
                         </div>
@@ -75,34 +61,10 @@ function CheckoutPage({ cart, cartItemsCount, selectedDelivery = 'standard', sel
                             </div>
                         ))}
                     </div>
-                    {/* Affichage des options */}
-                    <div className="order-options">
-                        <div>
-                            <span>Livraison :</span>
-                            <span>{DELIVERY_OPTIONS[selectedDelivery]?.label} (+{deliveryPrice}€)</span>
-                        </div>
-                        {Object.entries(selectedServices).map(([key, isChecked]) =>
-                            isChecked ? (
-                                <div key={key}>
-                                    <span>{ADDITIONAL_SERVICES[key]?.label} :</span>
-                                    <span>+{ADDITIONAL_SERVICES[key]?.price}€</span>
-                                </div>
-                            ) : null
-                        )}
-                    </div>
                 </div>
-
                 <div className='order-totals'>
-                    <h3>Total de la commande</h3>
+                    <h3>Total TTC du panier</h3>
                     <div className="totals-breakdown">
-                        <div className="total-line subtotal">
-                            <span>Sous-total HT :</span>
-                            <span>{totalHT.toFixed(2)}€</span>
-                        </div>
-                        <div className="total-line tax">
-                            <span>TVA (20%) :</span>
-                            <span>{tva.toFixed(2)}€</span>
-                        </div>
                         <div className="total-line final-total">
                             <span>Total TTC :</span>
                             <span>{totalTTC.toFixed(2)}€</span>
@@ -110,25 +72,18 @@ function CheckoutPage({ cart, cartItemsCount, selectedDelivery = 'standard', sel
                     </div>
                 </div>
             </div>
-
             <div className='checkout-actions'>
                 <div className="action-group secondary-actions">
                     <Link to="/cart" className="btn-secondary">
                         <span className="btn-icon">←</span>
-                        <span className="btn-text">Retourner au panier</span>
+                        <span className="btn-text">Retour au panier</span>
                     </Link>
                 </div>
                 <div className="action-group primary-actions">
-                    {!hasShippingInfo ? (
-                        <Link to="/shipping" className="btn-primary">
-                            <span className="btn-text">Continuer vers la livraison</span>
-                            <span className="btn-icon">→</span>
-                        </Link>
-                    ) : (
-                        <button className="btn-primary" onClick={handleOrderValidation}>
-                            <span className="btn-text">Retour à l'accueil</span>
-                        </button>
-                    )}
+                    <button className="btn-primary" onClick={handleGoToShipping}>
+                        <span className="btn-text">Continuer vers la livraison</span>
+                        <span className="btn-icon">→</span>
+                    </button>
                 </div>
             </div>
         </div>

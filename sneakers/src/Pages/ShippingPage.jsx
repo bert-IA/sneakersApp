@@ -111,8 +111,8 @@ function ShippingForm({ onShippingComplete, clearCart }) {
             if (onShippingComplete) {
                 onShippingComplete(formData);
             }
-            // Redirection vers la synthèse finale
-            navigate('/checkout');
+            // Redirection vers la page de confirmation
+            navigate('/confirmation');
 
         } catch (error) {
             setErrors({ general: "Erreur lors de l'envoi" });

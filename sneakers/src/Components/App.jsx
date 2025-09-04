@@ -145,6 +145,9 @@ function App() {
                             path="/confirmation"
                             element={
                                 <ConfirmationPage
+                                    cart={cart}
+                                    cartItemsCount={cartItemsCount}
+                                    shippingChoices={shippingChoices}
                                     clearCart={clearCart}
                                     clearShipping={clearShipping}
                                 />
