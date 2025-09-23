@@ -1,4 +1,4 @@
-import ShoppingList from '../Components/ShoppingList';
+import ShoppingList from '../Components/features/ShoppingList'; // ← NOUVEAU : structure organisée
 
 function HomePage({ cart, addToCart }) {
     return (

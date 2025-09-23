@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import logo from '../assets/logosneaker.jpg';
-import '../styles/Banner.css';
+import logo from '../../assets/logosneaker.jpg'; // ← CORRIGÉ : chemin adapté
+import '../../styles/Banner.css'; // ← CORRIGÉ : chemin adapté
 
 function Banner({ cartItemsCount = 0 }) {
   return (

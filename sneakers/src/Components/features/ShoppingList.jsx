@@ -1,6 +1,6 @@
-import { sneakersList } from '../datas/sneakersList';
+import { sneakersList } from '../../datas/sneakersList'; // ← NOUVEAU : chemin adapté
 import SneakerItem from './SneakerItem';
-import '../styles/ShoppingList.css';
+import '../../styles/ShoppingList.css'; // ← NOUVEAU : chemin adapté
 
 function ShoppingList({addToCart}) {
     return (

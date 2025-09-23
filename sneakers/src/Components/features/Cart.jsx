@@ -1,5 +1,5 @@
-import '../styles/Cart.css';
-import { calculateCartCount, calculateCartTotal } from '../utils/cartHelpers'; // ← NOUVEAU : import des fonctions utilitaires
+import '../../styles/Cart.css'; // ← NOUVEAU : chemin adapté
+import { calculateCartCount, calculateCartTotal } from '../../utils/cartHelpers'; // ← NOUVEAU : chemin adapté
 
 function Cart({ cartItems, removeFromCart, clearCart }) {
     // NOUVEAU : utilisation des fonctions utilitaires

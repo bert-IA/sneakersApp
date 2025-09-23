@@ -1,4 +1,4 @@
-import Cart from '../Components/Cart';
+import Cart from '../Components/features/Cart'; // ← NOUVEAU : structure organisée
 import { Link } from 'react-router-dom';
 import '../styles/CartPage.css';
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';  // Import du hook useState pour gérer l'état local
 import CustomerReview from './CustomerReview';  // Import du composant CustomerReview pour afficher les avis
-import '../styles/SneakerItem.css';  // Import du CSS pour le style du composant
+import '../../styles/SneakerItem.css';  // ← NOUVEAU : chemin adapté
 
 function SneakerItem({ sneakerData, addToCart }) {
     // ÉTAT LOCAL : gère l'affichage/masquage des avis détaillés

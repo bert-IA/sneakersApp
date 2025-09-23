@@ -1,13 +1,13 @@
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useCart } from '../hooks/useCart'; // ← NOUVEAU : import du hook personnalisé
+import { useCart } from '../../hooks/useCart'; // ← NOUVEAU : import du hook personnalisé
 
 import Banner from './Banner';
-import HomePage from '../Pages/HomePage';
-import CartPage from '../Pages/CartPage';
-import CheckoutPage from '../Pages/CheckoutPage';
-import ShippingPage from '../Pages/ShippingPage';
-import '../styles/App.css';
+import HomePage from '../../Pages/HomePage';
+import CartPage from '../../Pages/CartPage';
+import CheckoutPage from '../../Pages/CheckoutPage';
+import ShippingPage from '../../Pages/ShippingPage';
+import '../../styles/App.css';
 
 function App() {
     // ← NOUVEAU : Utilisation du hook au lieu de gérer l'état ici
