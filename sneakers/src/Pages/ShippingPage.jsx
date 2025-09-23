@@ -1,8 +1,12 @@
-import { Link } from "react-router-dom";
 import '../styles/ShippingPage.css';
-import {useState} from 'react';
+import { useState } from 'react';
 
-function ShippingForm({ onShippingComplete }) {
+// Composant réutilisable pour l'affichage des erreurs
+const ErrorMessage = ({ error }) => (
+    error ? <span className="error-text">{error}</span> : null
+);
+
+function ShippingForm({ onShippingComplete , clearCart }) {
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -11,8 +15,14 @@ function ShippingForm({ onShippingComplete }) {
         address: '',
         city: '',
         postalCode: '',
-        country: 'France',
         deliveryOptions: 'standard',
+        specialInstructions: '',
+        deliveryTime: '',
+        additionalServices: {
+            assembly: false,
+            giftWrap: false,
+            insurance : false
+        },
         newsletter: false
     });
 
@@ -20,13 +30,27 @@ function ShippingForm({ onShippingComplete }) {
     const [errors, setErrors] = useState({});
     const [success, setSuccess] = useState(false);
 
+    // Handler universel pour les champs simples et imbriqués d'un niveau
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: type === 'checkbox' ? checked : value
-        }));
-        
+        // Si le name contient un point, on gère une propriété imbriquée (ex: additionalServices.assembly)
+        if (name.includes('.')) {
+            const [parent, child] = name.split('.'); // Sépare le parent et l'enfant
+            setFormData(prev => ({
+                ...prev,
+                [parent]: {
+                    ...prev[parent],
+                    [child]: type === 'checkbox' ? checked : value // Met à jour la propriété enfant
+                }
+            }));
+        } else {
+            // Sinon, on gère une propriété simple
+            setFormData(prev => ({
+                ...prev,
+                [name]: type === 'checkbox' ? checked : value
+            }));
+        }
+        // Réinitialise l'erreur du champ si elle existe
         if (errors[name]) {
             setErrors(prev => ({ ...prev, [name]: '' }));
         }
@@ -41,7 +65,8 @@ function ShippingForm({ onShippingComplete }) {
         if (!data.address.trim()) errors.address = 'Adresse requise';
         if (!data.city.trim()) errors.city = 'Ville requise';
         if (!data.postalCode.trim()) errors.postalCode = 'Code postal requis';
-        
+        if (!data.deliveryTime) errors.deliveryTime = 'Créneau requis';
+
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (data.email && !emailRegex.test(data.email)) {
             errors.email = 'Format email invalide';
@@ -52,13 +77,19 @@ function ShippingForm({ onShippingComplete }) {
             errors.postalCode = 'Code postal invalide';
         }
         
-        const phoneRegex = /^[0-9\s\-\+\(\)]{10,}$/;
+        
+        if (data.phone && data.phone.trim()) {
+        const phoneRegex = /^[0-9\s\-+()]{10,}$/;
         if (!phoneRegex.test(data.phone)) {
             errors.phone = 'Téléphone invalide (minimum 10 chiffres)';
+            }
+            if (data.specialInstructions && data.specialInstructions.length > 200) {
+                errors.specialInstructions = 'Instructions trop longues (max 200 caractères)';
         }
+    }
 
-        return errors;
-    };
+    return errors;
+};
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -76,10 +107,11 @@ function ShippingForm({ onShippingComplete }) {
             await new Promise(resolve => setTimeout(resolve, 1000));
             
             setSuccess(true);
+            clearCart(); // Vide le panier juste après la validation
             onShippingComplete?.(formData);
             
         } catch (error) {
-            setErrors({ general: 'Erreur lors de l\'envoi' });
+            setErrors({ general: "Erreur lors de l'envoi" });
         } finally {
             setIsSubmitting(false);
         }
@@ -112,9 +144,7 @@ function ShippingForm({ onShippingComplete }) {
                             onChange={handleChange}
                             disabled={isSubmitting}
                         />
-                        {errors.firstName && 
-                            <span className="error-text">{errors.firstName}</span>
-                        }
+                        <ErrorMessage error={errors.firstName} />
                     </div>
                     
                     <div className="form-group">
@@ -127,9 +157,7 @@ function ShippingForm({ onShippingComplete }) {
                             onChange={handleChange}
                             disabled={isSubmitting}
                         />
-                        {errors.lastName && 
-                            <span className="error-text">{errors.lastName}</span>
-                        }
+                        <ErrorMessage error={errors.lastName} />
                     </div>
                     
                     <div className="form-group">
@@ -142,24 +170,21 @@ function ShippingForm({ onShippingComplete }) {
                             onChange={handleChange}
                             disabled={isSubmitting}
                         />
-                        {errors.email && 
-                            <span className="error-text">{errors.email}</span>
-                        }
+                        <ErrorMessage error={errors.email} />
                     </div>
 
                         <div className="form-group">
-                        <label htmlFor="phone">Téléphone *</label>
+                        <label htmlFor="phone">Téléphone</label>
                         <input 
                             id="phone"
                             name="phone"
                             type="tel"
                             value={formData.phone}
                             onChange={handleChange}
+                            placeholder='0634128950'
                             disabled={isSubmitting}
                         />
-                        {errors.phone && 
-                            <span className="error-text">{errors.phone}</span>
-                        }
+                        <ErrorMessage error={errors.phone} />
                     </div>
 
                 </fieldset>
@@ -177,9 +202,7 @@ function ShippingForm({ onShippingComplete }) {
                             onChange={handleChange}
                             disabled={isSubmitting}
                         />
-                        {errors.address && 
-                            <span className="error-text">{errors.address}</span>
-                        }
+                        <ErrorMessage error={errors.address} />
                     </div>
                     
                     <div className="form-group">
@@ -192,9 +215,7 @@ function ShippingForm({ onShippingComplete }) {
                             onChange={handleChange}
                             disabled={isSubmitting}
                         />
-                        {errors.city && 
-                            <span className="error-text">{errors.city}</span>
-                        }
+                        <ErrorMessage error={errors.city} />
                     </div>
                     
                     <div className="form-group">
@@ -208,9 +229,7 @@ function ShippingForm({ onShippingComplete }) {
                             maxLength={5}
                             disabled={isSubmitting}
                         />
-                        {errors.postalCode && 
-                            <span className="error-text">{errors.postalCode}</span>
-                        }
+                        <ErrorMessage error={errors.postalCode} />
                     </div>
                 </fieldset>
 
@@ -242,26 +261,112 @@ function ShippingForm({ onShippingComplete }) {
                             Livraison express (24h) - 9,99€
                         </label>
                     </div>
-                </fieldset>
 
+                    {formData.deliveryOptions==="express" && (
+                        <div className="form-group">
+                            <label htmlFor="specialInstructions">Instructions spéciales</label>
+                            <textarea
+                                id="specialInstructions"
+                                name="specialInstructions"
+                                value={formData.specialInstructions}
+                                onChange={handleChange}
+                                placeholder="code d'accès, étage, précisions..."
+                                maxLength={200}
+                                rows={4}
+                                disabled={isSubmitting}
+                            />
+                        <small className="char-count">
+                        {formData.specialInstructions.length}/200 caractères
+                        </small>
+
+                        <ErrorMessage error={errors.specialInstructions} />
+                        </div>
+                    )}
+                    <div className="form-group">
+                    <label htmlFor="deliveryTime">Créneau de livraison</label>
+                    <select
+                        id="deliveryTime"
+                        name="deliveryTime"
+                        value={formData.deliveryTime}
+                        onChange={handleChange}
+                        disabled={isSubmitting}
+                        
+                    >
+                        <option value="">Choisir un créneau</option>
+                        <option value="morning">Matin(8h-12h)</option>
+                        <option value="midday">Midi(10h-14h)</option>
+                        <option value="afternoon">Après-midi(14h-18h)</option>
+                    </select>
+                    <ErrorMessage error={errors.deliveryTime} />
+                    </div>
+
+                </fieldset>
+                <fieldset>
+                    <legend>Services additionnels</legend>
+                    <div className="form-group">
+                        <label htmlFor="assembly"></label>
+                            <input 
+                                id="assembly"
+                                name="additionalServices.assembly"
+                                type="checkbox"
+                                checked={formData.additionalServices.assembly}
+                                onChange={handleChange}
+                                disabled={isSubmitting}
+                            />
+                            Montage à domicile (+105,00€)
+                        
+                    </div>
+                    
+                    <div className="form-group">
+                        <label htmlFor="giftWrap"></label>
+                            <input 
+                                id="giftWrap"
+                                name="additionalServices.giftWrap"
+                                type="checkbox"
+                                checked={formData.additionalServices.giftWrap}
+                                onChange={handleChange}
+                                disabled={isSubmitting}
+                            />
+                            Emballage cadeau (+5,00€)
+                        
+                    
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="insurance"></label>
+                            <input 
+                                id="insurance"
+                                name="additionalServices.insurance"
+                                type="checkbox"
+                                checked={formData.additionalServices.insurance}
+                                onChange={handleChange}
+                                disabled={isSubmitting}
+                            />
+                            Assurance livraison (+15,00€)
+                        
+                    </div>
+
+                </fieldset>
                 <fieldset>
                     <legend>Préférences</legend>
-                    
-                    <label>
-                        <input 
-                            name="newsletter"
-                            type="checkbox"
-                            checked={formData.newsletter}
-                            onChange={handleChange}
-                            disabled={isSubmitting}
-                        />
+
+                    <div className="form-group">
+                        <label htmlFor="newsletter"></label>
+                            <input 
+                                id="newsletter"
+                                name="newsletter"
+                                type="checkbox"
+                                checked={formData.newsletter}
+                                onChange={handleChange}
+                                disabled={isSubmitting}
+                            />
                         S'abonner à notre newsletter
-                    </label>
+                    
+                    </div>
                 </fieldset>
 
                 {errors.general && (
                     <div className="error-banner">
-                        {errors.general}
+                        <ErrorMessage error={errors.general} />
                     </div>
                 )}
 
