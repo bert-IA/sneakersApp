@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import '../styles/CheckoutPage.css';
+import { calculateCartTotal } from '../utils/cartHelpers'; // ← NOUVEAU : import de la fonction utilitaire
 
 function CheckoutPage({ cart, cartItemsCount }) {
-    const totalTTC = cart.reduce((total,item) => total + (item.prix*item.quantity),0);
+    // NOUVEAU : utilisation de la fonction utilitaire
+    const totalTTC = calculateCartTotal(cart);
     const HT = totalTTC/1.2;
     const TVA = totalTTC-HT;
     

@@ -1,10 +1,10 @@
 import '../styles/Cart.css';
+import { calculateCartCount, calculateCartTotal } from '../utils/cartHelpers'; // ← NOUVEAU : import des fonctions utilitaires
 
 function Cart({ cartItems, removeFromCart, clearCart }) {
-    const totalItems= cartItems.reduce((sum, item) =>
-        sum + item.quantity,0)
-    const totalPrice = cartItems.reduce((sum, item) => 
-        sum + (item.prix * item.quantity),0);
+    // NOUVEAU : utilisation des fonctions utilitaires
+    const totalItems = calculateCartCount(cartItems);
+    const totalPrice = calculateCartTotal(cartItems);
 
     const handleRemoveFromCart = (itemToRemove) => {
         removeFromCart(itemToRemove);

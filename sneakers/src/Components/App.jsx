@@ -1,6 +1,7 @@
 
 import {useState, useEffect} from 'react'; // ← IMPORT : permet de gérer l'état dans les composants fonctionnels
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { calculateCartCount } from '../utils/cartHelpers'; // ← NOUVEAU : import des fonctions utilitaires
 import Banner from './Banner'; // ← IMPORT : récupère le composant
 import HomePage from '../Pages/HomePage';     // ← NOUVEAU : page d'accueil
 import CartPage from '../Pages/CartPage';     // ← NOUVEAU : page panier  
@@ -65,8 +66,8 @@ function App() {
         setCart([]); // Réinitialise le panier
     }
 
-    // Calcul du nombre d'articles dans le panier
-    const cartItemsCount = cart.reduce((total, item) => total + item.quantity, 0);
+    // Calcul du nombre d'articles dans le panier - NOUVEAU : utilise la fonction utilitaire
+    const cartItemsCount = calculateCartCount(cart);
 
     return (
         <BrowserRouter>
