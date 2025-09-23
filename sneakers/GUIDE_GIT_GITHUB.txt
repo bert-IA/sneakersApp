@@ -1,0 +1,474 @@
+Guide complet : Creer un repository GitHub et pousser votre projet
+
+========================================================================
+
+OBJECTIF
+Creer un repository sur GitHub et y pousser votre projet sneakers-app existant.
+
+========================================================================
+
+PREREQUIS
+- Avoir un compte GitHub (github.com)
+- Avoir Git installe sur votre machine
+- Etre dans Visual Studio Code avec votre projet sneakers ouvert
+- Vous etes deja dans le bon dossier de travail
+
+========================================================================
+
+ETAPES DETAILLEES
+
+========================================================================
+
+Etape 1 : Creer le repository sur GitHub (Interface web)
+
+1. Connectez-vous a GitHub -> https://github.com
+2. Cliquez sur le bouton vert "New" (ou l'icone "+" en haut a droite puis "New repository")
+3. Remplissez le formulaire :
+   - Repository name : sneakersApp (ou le nom de votre choix)
+   - Description : Application React pour la vente de sneakers
+   - Visibilite : Choisir "Public" ou "Private"
+   - IMPORTANT : NE COCHEZ AUCUNE CASE en bas (ni README, ni .gitignore, ni license)
+4. Cliquez sur "Create repository"
+5. Gardez cette page ouverte -> vous aurez besoin de l'URL qui s'affiche
+
+========================================================================
+
+PROCEDURE DE REMISE A ZERO (si vous avez deja essaye Git)
+
+Si vous avez deja tente de configurer Git et que vous voulez repartir a zero, 
+suivez ces etapes AVANT de continuer avec le guide principal :
+
+1. Dans le terminal VS Code, verifiez votre etat actuel :
+   git status
+
+2. Si vous voyez des fichiers ou des commits existants, executez ces commandes :
+   
+    Remove-Item -Recurse -Force .git
+
+Supprimer le dossier .git existant (remet tout a zero). Vos fichiers de code (src/, public/, etc.) ne sont PAS touches !
+  
+   
+   # Verifier que Git n'est plus initialise
+   git status
+   
+   Vous devriez voir : "not a git repository"
+
+3. Si vous aviez deja cree un repository sur GitHub :
+   - Allez sur GitHub
+   - Supprimez le repository existant (Settings -> Delete this repository)
+   - Recreez-le en suivant l'Etape 1 du guide
+
+4. Maintenant, continuez avec l'Etape 2 ci-dessous
+
+ATTENTION : Cette procedure supprime tout l'historique Git local. 
+Vos fichiers de code React (Components, assets, etc.) restent intacts !
+Utilisez-la seulement si vous voulez vraiment repartir de zero avec Git !
+
+========================================================================
+
+Etape 2 : Ouvrir le terminal integre de Visual Studio Code
+
+1. Dans VS Code, allez dans le menu : Terminal > New Terminal
+   (ou utilisez le raccourci Ctrl + ` )
+2. Le terminal s'ouvre en bas de l'ecran
+3. Verifiez que vous etes bien dans le dossier sneakers :
+   
+   pwd
+   
+   Vous devriez voir quelque chose comme : h:\B2SIO\REACT_tp\React\sneakers
+
+4. Si vous n'etes pas dans le bon dossier, naviguez :
+   
+   cd "h:\B2SIO\REACT_tp\React\sneakers"
+
+========================================================================
+
+Etape 3 : Verifier si Git est deja initialise
+
+Dans le terminal de VS Code, tapez :
+
+git status
+
+Reactions possibles :
+- Si vous voyez un message d'erreur "not a git repository" -> passez a l'etape 4
+- Si vous voyez des informations sur les fichiers -> passez directement a l'etape 5
+
+========================================================================
+
+Etape 4 : Initialiser Git (si necessaire)
+
+Dans le terminal de VS Code :
+
+git init
+
+Vous devriez voir : "Initialized empty Git repository"
+
+========================================================================
+
+Etape 5 : Preparer les fichiers pour le commit
+
+5.1 Creer un fichier .gitignore (recommande)
+
+Dans le terminal de VS Code :
+
+New-Item .gitignore -ItemType File
+
+Puis ouvrez le fichier .gitignore dans VS Code et ajoutez ce contenu :
+
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Production build
+build/
+dist/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+Sauvegardez le fichier (Ctrl + S).
+
+5.2 Ajouter tous les fichiers au staging
+
+Dans le terminal de VS Code :
+
+git add .
+
+5.3 Verifier ce qui va etre commite
+
+git status
+
+Vous devriez voir tous vos fichiers en vert (prets a etre commites).
+
+========================================================================
+
+Etape 6 : Faire le premier commit
+
+Dans le terminal de VS Code :
+
+git commit -m "Premier commit : Application React sneakers"
+
+========================================================================
+
+Etape 7 : Connecter votre projet au repository GitHub
+
+7.1 Ajouter l'origine distante
+
+ATTENTION : Remplacez VOTRE-USERNAME et sneakers-app par vos vraies valeurs
+
+git remote add origin https://github.com/VOTRE-USERNAME/sneakersApp.git
+
+Exemple concret :
+git remote add origin https://github.com/johnDoe/sneakersApp.git
+
+7.2 Verifier que l'origine est bien ajoutee
+
+git remote -v
+
+Vous devriez voir deux lignes avec votre URL GitHub.
+
+========================================================================
+
+Etape 8 : Pousser votre code sur GitHub
+
+8.1 Creer et definir la branche principale
+
+git branch -M main
+
+8.2 Pousser le code
+
+git push -u origin main
+
+Si on vous demande vos identifiants :
+- Username : Votre nom d'utilisateur GitHub
+- Password : Votre token d'acces personnel (PAS votre mot de passe GitHub)
+
+========================================================================
+
+UTILISATION DE GIT ET GITHUB AVEC VISUAL STUDIO CODE
+
+========================================================================
+
+VS Code offre une integration native avec Git qui facilite grandement le travail :
+
+1. INTERFACE GRAPHIQUE GIT DANS VS CODE
+
+   - Ouvrez l'onglet "Source Control" (icone de branche sur la barre laterale gauche)
+   - Vous y verrez tous vos fichiers modifies
+   - Les fichiers non suivis apparaissent avec "U"
+   - Les fichiers modifies avec "M"
+   - Les fichiers supprimes avec "D"
+
+2. EFFECTUER UN COMMIT VIA L'INTERFACE VS CODE
+
+   a) Dans l'onglet Source Control :
+      - Cliquez sur "+" a cote des fichiers pour les ajouter au staging
+      - Ou cliquez sur "+" a cote de "Changes" pour tout ajouter
+      
+   b) Ecrivez votre message de commit dans la zone de texte en haut
+   
+   c) Cliquez sur le bouton "Commit" (icone de coche)
+   
+   d) Pour pousser : cliquez sur "..." puis "Push"
+
+3. VISUALISATION DES CHANGEMENTS
+
+   - Cliquez sur un fichier modifie dans Source Control
+   - VS Code ouvre une vue "diff" montrant les changements
+   - Rouge = supprime, Vert = ajoute
+   - Vous pouvez annuler des changements ligne par ligne
+
+4. GESTION DES BRANCHES
+
+   - En bas a gauche de VS Code, vous voyez le nom de la branche courante
+   - Cliquez dessus pour :
+     * Changer de branche
+     * Creer une nouvelle branche
+     * Fusionner des branches
+
+5. SYNCHRONISATION AVEC GITHUB
+
+   - L'icone de synchronisation (cercles) en bas a gauche indique :
+     * Fleche vers le haut : commits a pousser
+     * Fleche vers le bas : commits a tirer
+   - Cliquez pour synchroniser automatiquement
+
+6. EXTENSION GITHUB POUR VS CODE (OPTIONNEL)
+
+   a) Installez l'extension "GitHub Pull Requests and Issues"
+   
+   b) Connectez-vous a GitHub directement depuis VS Code :
+      - Palette de commandes (Ctrl + Shift + P)
+      - Tapez "GitHub: Sign in"
+      - Suivez les instructions
+   
+   c) Fonctionnalites supplementaires :
+      - Creation de Pull Requests
+      - Gestion des Issues
+      - Review de code
+      - Clone direct depuis GitHub
+
+7. RACCOURCIS CLAVIER UTILES
+
+   - Ctrl + Shift + G : Ouvrir Source Control
+   - Ctrl + Shift + P : Palette de commandes (tapez "Git:" pour voir toutes les commandes)
+   - Ctrl + ` : Ouvrir/fermer le terminal
+
+8. WORKFLOW RECOMMANDE AVEC VS CODE
+
+   a) Modifiez vos fichiers normalement
+   
+   b) Allez dans Source Control (Ctrl + Shift + G)
+   
+   c) Verifiez les changements (cliquez sur les fichiers)
+   
+   d) Ajoutez les fichiers au staging (bouton "+")
+   
+   e) Ecrivez un message de commit explicite
+   
+   f) Commitez (bouton de coche)
+   
+   g) Poussez vers GitHub (bouton "..." puis "Push" ou icone de synchro)
+
+9. BONNES PRATIQUES
+
+   - Commitez souvent avec des messages clairs
+   - Verifiez toujours vos changements avant de commiter
+   - Utilisez la vue diff pour verifier ligne par ligne
+   - Poussez regulierement sur GitHub pour sauvegarder
+   - Utilisez des branches pour les nouvelles fonctionnalites
+
+========================================================================
+
+CONFIGURATION DU TOKEN GITHUB (si necessaire)
+
+Si vous n'avez pas encore de token d'acces personnel :
+
+1. Allez sur GitHub -> Settings (votre profil)
+2. Developer settings -> Personal access tokens -> Tokens (classic)
+3. Generate new token (classic)
+4. Cochez : repo (Full control of private repositories)
+5. Generez et copiez le token
+6. Utilisez ce token comme mot de passe lors du push
+
+========================================================================
+
+VERIFICATION
+
+Apres avoir suivi toutes les etapes :
+
+1. Rafraichissez la page de votre repository sur GitHub
+2. Vous devriez voir tous vos fichiers apparaitre
+3. Testez en modifiant un fichier localement, puis dans le terminal VS Code :
+   
+   git add .
+   git commit -m "Test de modification"
+   git push
+
+========================================================================
+
+COMMANDES UTILES POUR LA SUITE
+
+Workflow quotidien dans le terminal VS Code :
+
+# Voir l'etat des fichiers
+git status
+
+# Ajouter des modifications
+git add .
+# ou ajouter un fichier specifique
+git add nom-du-fichier.js
+
+# Faire un commit
+git commit -m "Description de vos modifications"
+
+# Pousser vers GitHub
+git push
+
+# Recuperer les dernieres modifications (si vous travaillez en equipe)
+git pull
+
+Gestion des branches dans VS Code :
+
+# Voir toutes les branches (locales et distantes)
+git branch -a
+
+# Changer de branche
+git checkout nom-de-la-branche
+
+# Creer et basculer vers une nouvelle branche
+git checkout -b nouvelle-branche
+
+# Via VS Code (plus simple) :
+# - Cliquez sur le nom de la branche en bas a gauche
+# - Selectionnez la branche ou creez-en une nouvelle
+
+Gestion des modifications non commitees :
+
+# Sauvegarder temporairement (stash)
+git stash
+# Recuperer les modifications stashees
+git stash pop
+# Voir la liste des stashs
+git stash list
+
+# Annuler toutes les modifications (ATTENTION : definitif)
+git checkout .
+
+# Via VS Code :
+# - Source Control > "..." > "Discard All Changes"
+
+Commandes de diagnostic :
+
+# Voir l'historique des commits
+git log --oneline
+
+# Voir les remotes configurees
+git remote -v
+
+# Voir les branches
+git branch -a
+
+========================================================================
+
+PROBLEMES COURANTS
+
+Erreur "repository not found"
+- Verifiez l'URL de votre repository
+- Verifiez que vous avez les droits d'acces
+
+Erreur d'authentification
+- Utilisez un token d'acces personnel, pas votre mot de passe
+- Verifiez que votre token a les bonnes permissions
+
+Erreur "branch ahead/behind"
+git pull origin main
+
+Le terminal ne reconnait pas les commandes Git
+- Verifiez que Git est installe sur votre machine
+- Redemarrez VS Code
+
+Erreur "src refspec main does not match any"
+- Vous etes sur la branche "master" au lieu de "main"
+- Solution : git branch -M main (pour renommer master en main)
+
+Erreur "fatal: couldn't find remote ref main" ou "couldn't find remote ref master"
+- Le repository distant est vide ou la branche n'existe pas
+- Assurez-vous d'avoir cree le repository sur GitHub SANS fichiers initiaux
+- Utilisez : git push -u origin main (pour creer la branche distante)
+
+Erreur "The current branch master has no upstream branch"
+- La branche locale n'est pas liee a la branche distante
+- Solution : git push -u origin main (apres avoir renomme en main)
+
+Erreur "Your local changes would be overwritten by checkout"
+- Vous avez des modifications non commitees qui empechent le changement de branche
+- Solutions possibles :
+
+Option 1 - Commiter vos changements (si vous voulez les garder) :
+git add .
+git commit -m "Sauvegarde avant changement de branche"
+git checkout nom-de-la-branche
+
+Option 2 - Stasher vos changements (garder temporairement) :
+git stash
+git checkout nom-de-la-branche
+# Pour recuperer vos modifications plus tard :
+git stash pop
+
+Option 3 - Annuler vos modifications (ATTENTION : perte definitive) :
+git checkout .
+git checkout nom-de-la-branche
+
+Option 4 - Via VS Code (le plus simple) :
+- Allez dans Source Control (Ctrl + Shift + G)
+- Soit commitez vos changements
+- Soit cliquez sur "..." puis "Discard All Changes"
+- Puis changez de branche via l'interface (clic sur le nom de branche en bas a gauche)
+
+DIAGNOSTIC RAPIDE - Si vous etes perdu :
+
+1. Verifiez votre branche actuelle :
+   git branch
+   
+2. Verifiez vos remotes :
+   git remote -v
+   
+3. Verifiez l'etat de votre repository :
+   git status
+   
+4. Si tout est melange, utilisez la "PROCEDURE DE REMISE A ZERO" en debut de guide
+
+========================================================================
+
+NOTES IMPORTANTES
+
+- TOUJOURS faire "git status" avant de commiter
+- Messages de commit explicites : decrivez ce que vous avez modifie
+- Regularite : commitez et pushez regulierement
+- Backup : GitHub devient votre sauvegarde, utilisez-le !
+- Utilisez l'interface graphique de VS Code pour visualiser vos changements
+- Le terminal integre de VS Code est synchronise avec l'interface graphique
+
+========================================================================
+
+Ce guide a ete cree pour votre projet sneakers-app avec Visual Studio Code.
+Gardez-le precieusement !

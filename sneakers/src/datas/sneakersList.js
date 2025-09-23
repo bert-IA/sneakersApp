@@ -1,14 +1,14 @@
 // Imports des images de sneakers une par marque
-import airMax from '../assets/sneakers/airJordan.jpg'; //jordan
-import forceZoom from '../assets/sneakers/airJordan.jpg'; // Jordan
+import airMax from '../assets/sneakers/IslaSandal.jpg'; //jordan
+import forceZoom from '../assets/sneakers/forceZoom.jpg'; // Jordan
 import airJordan from '../assets/sneakers/airJordan.jpg';
-import allStar from '../assets/sneakers/chuckTaylor.jpg'; // converse
-import chuckTaylor from '../assets/sneakers/chuckTaylor.jpg';
+import allStar from '../assets/sneakers/allstar.jpg'; // converse
+import chuckTaylor from '../assets/sneakers/allStarLitft.jpg';
 import runStar from '../assets/sneakers/chuckTaylor.jpg';
-import sneakersRouge from '../assets/sneakers/basketsPatch.jpg'; // Givenchy
-import basketsPatch from '../assets/sneakers/basketsPatch.jpg';
-import urbanStreet from '../assets/sneakers/basketsPatch.jpg';
-import airForce from '../assets/sneakers/airJordan.jpg'; // jordan
+import sneakersRouge from '../assets/sneakers/rougeVif.jpg'; // Givenchy
+import basketsPatch from '../assets/sneakers/patchLogo.jpg';
+import urbanStreet from '../assets/sneakers/urbanStreet.jpg';
+import airForce from '../assets/sneakers/airForce1.jpg'; // jordan
 
 export const sneakersList = [
   {
