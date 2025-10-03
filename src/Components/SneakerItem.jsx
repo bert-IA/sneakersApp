@@ -17,4 +17,3 @@ function SneakerItem({ nom, marque, prix, style, esthetique, confort }) {  // De
 }
 
 export default SneakerItem;
-

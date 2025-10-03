@@ -1,0 +1,22 @@
+.customer-review {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 6px 0; 
+}
+
+.review-label {
+    font-weight: 600; 
+    color: #4b5563; 
+    min-width: 80px;
+    font-size: 0.9rem;
+}
+
+.review-scale {
+    display: flex;
+    gap: 2px;
+}
+
+.scale-icon {
+    font-size: 1.1em;
+}

@@ -1,9 +1,34 @@
 /* Style de base pour chaque sneaker item */
+.best-seller-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #ff4444;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+.sneaker-item.best-seller {
+  border: 2px solid gold;
+  box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Hover spécifique pour les best-sellers */
+.sneaker-item.best-seller:hover {
+  transform: translateY(-7px);  /* Plus haut que le hover normal */
+  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+}
+
 .sneaker-item {
+  position: relative;  /* Nécessaire pour le positionnement du badge */
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  padding: 15px;  /* Réduit de 20px à 15px */
   transition: all 0.3s ease;
   border: 1px solid #e5e7eb;
   width: 100%;
@@ -18,23 +43,23 @@
 
 /* Style pour les images de sneakers */
 .sneaker-image {
-  width: 100%;
-  height: 200px;
+  width: 80%;  /* Réduit de 100% à 80% */
+  height: 140px;  /* Réduit de 160px à 140px */
   border-radius: 8px;
-  margin-bottom: 15px;
+  margin: 0 auto 12px auto;  /* Centre l'image */
   object-fit: cover;  /* Pour que l'image garde ses proportions */
   display: block;
 }
 
 .sneaker-item h3 {
-  margin: 0 0 12px 0;
-  font-size: 1.4rem;
+  margin: 0 0 8px 0;  
+  font-size: 1.3rem;  
   color: #1f2937;
   font-weight: 600;
 }
 
 .sneaker-item p {
-  margin: 8px 0;  /* Seulement les marges communes */
+  margin: 6px 0; 
 }
 
 .sneaker-brand {
@@ -58,19 +83,62 @@
   display: inline-block;
   font-size: 0.85rem;
   font-weight: 500;
-  margin: 8px 0;
+  margin: 6px 0;  
 }
 
 /* Section des avis */
 .sneaker-review {
   border-top: 1px solid #e5e7eb;
-  padding-top: 15px;
-  margin-top: 15px;
+  padding-top: 12px;  
+  margin-top: 12px;  
 }
-
 .sneaker-review > div {
-  margin: 8px 0;
+  margin: 6px 0;  
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+/* Conteneur des avis détaillés */
+.avis-details {
+  display: flex; /* active le layout flexible */
+  flex-direction: column; /* Éléments en colonne */
+  gap: 8px; /* Espacement entre les avis */
+  margin-top: 10px; /* Séparation du bouton */
+}
+
+/* Section actions (bouton panier) */
+.sneaker-actions {
+  margin: 15px 0;
+}
+
+.customer-review {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 6px 0; /* Cohérent avec .sneaker-item p */
+}
+
+/* Bouton ajouter au panier */
+.add-to-cart-btn {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.add-to-cart-btn:hover {
+  background: linear-gradient(135deg, #5a67d8 0%, #6b5b95 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
 }
