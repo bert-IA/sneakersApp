@@ -1,0 +1,72 @@
+/* CartPage.css - Design cohérent avec CheckoutPage */
+.cart-page {
+    padding: 10px;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+/* ============= SECTION CHECKOUT ============= */
+.checkout-section {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.checkout-button {
+    padding: 12px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    box-shadow: 0 3px 12px rgba(0, 123, 255, 0.3);
+    justify-content: center;
+}
+
+.checkout-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+}
+
+.btn-icon {
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.checkout-button:hover .btn-icon {
+    transform: translateX(3px);
+}
+
+/* ============= RESPONSIVE ============= */
+@media (max-width: 768px) {
+    .cart-page {
+        padding: 10px;
+    }
+    
+    .cart-page-header {
+        padding: 15px;
+    }
+    
+    .cart-page-header h2 {
+        font-size: 1.8rem;
+    }
+    
+    .checkout-button {
+        justify-content: center;
+        padding: 15px;
+    }
+}

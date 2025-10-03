@@ -1,0 +1,287 @@
+/* Cart.css - Design harmonisé avec CheckoutPage */
+.cart {
+    background: white;
+    border-radius: 16px;
+    padding: 0;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+    border-top: 3px solid #007bff;
+    margin: 0;
+    height: fit-content;
+}
+
+/* Contenu du panier avec padding */
+.cart-content {
+    padding: 20px;
+}
+
+/* ============= HEADER DU PANIER ============= */
+.cart-header {
+    margin-bottom: 15px;
+    padding: 15px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e9ecef;
+    text-align: center;
+    background: white;
+    border-radius: 12px 12px 0 0;
+    border-left: 4px solid #007bff;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+}
+
+.cart-header h2 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ============= CONTAINER DES ITEMS ============= */
+.cart-items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px 0;
+    padding: 0 20px;
+}
+
+/* ============= CAS PANIER VIDE ============= */
+.empty-cart {
+    text-align: center;
+    padding: 50px 30px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 16px;
+    margin: 20px;
+    border-left: 4px solid #6c757d;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+}
+
+.empty-cart-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    opacity: 0.7;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.empty-cart h3 {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 15px 0;
+}
+
+.empty-cart p {
+    color: #6c757d;
+    font-size: 1rem;
+    margin: 0;
+    line-height: 1.5;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+/* ============= STYLE DES ITEMS ============= */
+.cart-item {
+    display: grid;
+    grid-template-columns: 50px 2fr auto auto;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 12px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 8px;
+    border-left: 3px solid #007bff;
+    transition: all 0.3s ease;
+}
+
+.cart-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.2);
+}
+
+/* Image de l'item */
+.cart-item-image {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #dee2e6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Détails de l'item */
+.cart-item-details {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.cart-item-details h4 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.cart-item-details p {
+    margin: 2px 0;
+    color: #6c757d;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.cart-item-price {
+    color: #28a745 !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+}
+
+/* Actions de l'item */
+.sneaker-action {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.remove-from-cart {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+.remove-from-cart:hover {
+    background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+}
+
+/* ============= RÉSUMÉ DU PANIER ============= */
+.cart-summary {
+    border-top: 2px solid #e9ecef;
+    padding: 15px 20px 0 20px;
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.cart-summary h3 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.4rem;
+    font-weight: 700;
+    padding: 12px 15px;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px rgba(40, 167, 69, 0.3);
+}
+
+/* ============= ACTIONS DU PANIER ============= */
+.cart-actions {
+    margin-top: 15px;
+    padding: 0 20px 20px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.clear-cart-btn {
+    background: transparent;
+    color: #6c757d;
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.clear-cart-btn:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #f8f9fa 100%);
+    color: #495057;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* ============= RESPONSIVE ============= */
+@media (max-width: 768px) {
+    .cart {
+        padding: 0;
+    }
+    
+    .cart-header {
+        padding: 15px;
+    }
+    
+    .cart-header h2 {
+        font-size: 1.8rem;
+    }
+    
+    .cart-items {
+        padding: 0 15px;
+    }
+    
+    .cart-item {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        text-align: center;
+        padding: 15px;
+    }
+    
+    .cart-item-image {
+        justify-self: center;
+    }
+    
+    .sneaker-action {
+        justify-content: center;
+    }
+    
+    .cart-summary {
+        padding: 15px 15px 0 15px;
+        justify-content: center;
+    }
+    
+    .cart-actions {
+        padding: 0 15px 15px 15px;
+    }
+    
+    .empty-cart {
+        margin: 15px;
+        padding: 40px 20px;
+    }
+    
+    .empty-cart-icon {
+        font-size: 3rem;
+    }
+    
+    .empty-cart h3 {
+        font-size: 1.3rem;
+    }
+    
+    .empty-cart p {
+        font-size: 0.9rem;
+    }
+    
+    .remove-from-cart {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .clear-cart-btn {
+        padding: 12px 16px;
+    }
+}

@@ -1,0 +1,51 @@
+DÉMARRER AVEC GIT, GITHUB ET VISUAL STUDIO CODE
+
+1. Introduction
+Ce document a pour objectif d'accompagner les étudiants dans la prise en main de Git et GitHub pour le projet sneakersApp. Il explique comment créer un repository distant, initialiser un dépôt local, synchroniser les modifications et utiliser Visual Studio Code pour gérer le versionnement.
+
+2. Création d’un repository GitHub
+- Connectez-vous à GitHub et créez un nouveau repository nommé sneakersApp.
+- Choisissez les paramètres de base : public ou privé, ajout d’un README, .gitignore si besoin.
+
+3. Initialisation d’un dépôt local
+- Vérifiez que votre dossier de travail est prêt.
+- Ouvrez un terminal et placez-vous dans le dossier du projet.
+- Initialisez Git avec la commande : git init
+- Vérifiez l’état du dépôt avec : git status
+
+4. Lier le dépôt local au repository GitHub
+- Ajoutez le remote avec : git remote add origin https://github.com/<votre-utilisateur>/sneakersApp.git
+- Vérifiez la connexion au remote avec : git remote -v
+
+5. Cloner le repository GitHub
+- Pour récupérer le projet sur une autre machine ou dossier, utilisez : git clone https://github.com/<votre-utilisateur>/sneakersApp.git
+- Différence : git init sert à démarrer un dépôt local, git clone sert à récupérer un dépôt existant.
+
+6. Pousser les modifications sur GitHub
+- Ajoutez les fichiers : git add .
+- Enregistrez les changements : git commit -m "Votre message"
+- Envoyez sur GitHub : git push origin main
+- Si un message d’erreur apparaît (divergence de branches), faites : git pull origin main
+- En cas de conflits, suivez les instructions pour les résoudre puis recommencez le push.
+
+7. Utiliser Visual Studio Code pour Git et GitHub
+- Visual Studio Code intègre des outils Git :
+  - Faire des commits, push et pull sans ligne de commande
+  - Créer et changer de branche
+  - Résoudre les conflits graphiquement
+  - Visualiser l’historique et les différences
+  - Synchroniser avec GitHub
+- Pour utiliser ces fonctions, ouvrez le panneau Source Control (icône Git) dans VS Code.
+
+8. Bonnes pratiques et conseils
+- Faites des commits réguliers avec des messages clairs
+- Travaillez sur des branches pour les nouvelles fonctionnalités
+- Faites un pull avant de push si vous travaillez à plusieurs
+- Vérifiez toujours l’état du dépôt avant d’envoyer vos modifications
+
+9. Ressources complémentaires
+- Documentation officielle Git : https://git-scm.com/doc
+- Documentation GitHub : https://docs.github.com/
+- Tutoriels vidéo et guides interactifs disponibles sur YouTube et OpenClassrooms
+
+Fin du document.

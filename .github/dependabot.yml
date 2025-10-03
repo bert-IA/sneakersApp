@@ -1,0 +1,4 @@
+# Configuration pour désactiver Dependabot
+# Ce fichier désactive complètement les mises à jour automatiques de Dependabot
+version: 2
+updates: []

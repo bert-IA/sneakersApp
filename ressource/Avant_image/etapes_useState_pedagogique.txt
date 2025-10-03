@@ -1,0 +1,150 @@
+TUTORIEL REACT : AFFICHAGE CONDITIONNEL AVEC USESTATE
+=====================================================
+
+OBJECTIF PEDAGOGIQUE
+--------------------
+Transformer un affichage d'avis par popup (alert) en affichage conditionnel intégré dans le composant grâce au hook useState.
+
+PROBLEMATIQUE ACTUELLE
+----------------------
+- Alert popup → Solution basique mais pas idéale UX (sort du contexte de la page)
+
+SOLUTION AVANCEE
+----------------
+- useState → Permet de gérer un état local d'un composant pour afficher/masquer dynamiquement le contenu dans le DOM
+
+CONCEPTS CLES A RETENIR
+-----------------------
+1. Hook useState pour la gestion d'état local
+2. Rendu conditionnel avec l'opérateur &&
+3. Gestionnaire d'événement pour modifier l'état
+4. Texte dynamique selon l'état du composant
+
+TRANSFORMATION ETAPE PAR ETAPE
+===============================
+
+ETAPE 1 : IMPORT DU HOOK USESTATE
+----------------------------------
+CODE A AJOUTER :
+import { useState } from 'react';
+
+EXPLICATION :
+- useState est un hook React qui permet de créer un état local dans un composant fonctionnel
+- Il doit être importé depuis 'react' pour pouvoir l'utiliser
+- Les hooks commencent toujours par "use" par convention React
+
+ETAPE 2 : DECLARATION DE L'ETAT LOCAL
+--------------------------------------
+CODE A AJOUTER (dans le composant) :
+const [showReviews, setShowReviews] = useState(false);
+
+EXPLICATION DETAILLEE :
+- useState(false) : Initialise l'état avec la valeur false (avis cachés par défaut)
+- [showReviews, setShowReviews] : Destructuration qui récupère deux éléments
+  * showReviews : Variable qui contient la valeur actuelle de l'état
+  * setShowReviews : Fonction pour modifier l'état
+- Quand l'état change, React re-rend automatiquement le composant
+
+ETAPE 3 : CREATION DU GESTIONNAIRE D'EVENEMENT
+-----------------------------------------------
+CODE A REMPLACER :
+// ANCIEN CODE (avec alert)
+const handleClickAvis = () => { 
+    const esthetismeText = formatReview('esthétisme', esthetique); 
+    const confortText = formatReview('confort', confort); 
+    alert(`Avis pour ${nom}:\n${esthetismeText}\n${confortText}`); 
+};
+
+// NOUVEAU CODE (avec useState)
+const handleToggleAvis = () => { 
+    setShowReviews(!showReviews);
+};
+
+EXPLICATION :
+- handleToggleAvis : Nouveau nom plus explicite (toggle = basculer)
+- !showReviews : Opérateur de négation qui inverse la valeur booléenne
+- setShowReviews() : Fonction qui modifie l'état et déclenche un re-rendu
+- Plus besoin de formatReview car on utilise directement CustomerReview
+
+ETAPE 4 : MODIFICATION DU BOUTON AVEC TEXTE DYNAMIQUE
+------------------------------------------------------
+CODE A REMPLACER :
+// ANCIEN CODE
+<button onClick={handleClickAvis}>Voir les avis</button>
+
+// NOUVEAU CODE
+<button onClick={handleToggleAvis}>
+    {showReviews ? 'Masquer les avis' : 'Voir les avis'}
+</button>
+
+EXPLICATION :
+- onClick={handleToggleAvis} : Référence à la nouvelle fonction (sans parenthèses !)
+- {showReviews ? 'Masquer' : 'Voir'} : Opérateur ternaire pour texte conditionnel
+- Le texte du bouton change selon l'état actuel
+- Amélioration UX : l'utilisateur sait toujours quelle action va se produire
+
+ETAPE 5 : RENDU CONDITIONNEL DES AVIS
+--------------------------------------
+CODE A REMPLACER :
+// ANCIEN CODE (affichage permanent)
+<CustomerReview reviewType='esthétisme' scaleValue={esthetique} />
+<CustomerReview reviewType='confort' scaleValue={confort} />
+
+// NOUVEAU CODE (affichage conditionnel)
+{showReviews && (
+    <div className="avis-details">
+        <CustomerReview reviewType='esthétisme' scaleValue={esthetique} />
+        <CustomerReview reviewType='confort' scaleValue={confort} />
+    </div>
+)}
+
+EXPLICATION :
+- {showReviews && (...)} : Rendu conditionnel avec opérateur logique ET
+- Si showReviews est true → affiche le contenu
+- Si showReviews est false → n'affiche rien
+- Les composants CustomerReview sont réutilisés (pas de perte de code)
+- <div className="avis-details"> : Conteneur pour styling spécifique
+
+CONCEPTS REACT AVANCES EXPLIQUES
+=================================
+
+1. PRINCIPE DU RENDU CONDITIONNEL
+----------------------------------
+- React ne rend que les éléments qui correspondent à des conditions vraies
+- {condition && <Element />} : Pattern très courant en React
+- Alternative possible : {condition ? <Element /> : null}
+
+2. GESTION D'ETAT AVEC USESTATE
+--------------------------------
+- L'état appartient au composant et lui seul
+- Chaque modification d'état déclenche un nouveau rendu
+- React compare l'ancien et le nouveau rendu (Virtual DOM)
+- Seules les différences sont mises à jour dans le DOM réel
+
+3. EVENEMENTS EN REACT
+-----------------------
+- onClick={fonction} : Référence à une fonction
+- onClick={fonction()} : Appel immédiat (ERREUR !)
+- Les événements React sont des SyntheticEvents (optimisés)
+
+4. BONNES PRATIQUES
+-------------------
+- Noms explicites : handleToggleAvis vs handleClick
+- État initialisé de manière logique : false pour "caché par défaut"
+- Texte dynamique pour meilleure UX
+- Réutilisation des composants existants
+
+RESULTATS OBTENUS
+=================
+✓ Affichage conditionnel des avis dans le DOM
+✓ Bouton avec texte dynamique selon l'état
+✓ Réutilisation du composant CustomerReview
+✓ Meilleure expérience utilisateur (pas de popup)
+✓ Introduction naturelle aux hooks React
+
+PROCHAINES ETAPES POSSIBLES
+============================
+- useEffect pour des effets de bord
+- Optimisation avec useCallback/useMemo
+- État plus complexe avec des objets
+- Communication entre composants parent/enfant
