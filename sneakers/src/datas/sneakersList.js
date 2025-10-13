@@ -1,5 +1,5 @@
 // Imports des images de sneakers une par marque
-import airMax from '../assets/sneakers/IslaSandal.jpg'; //jordan
+import islaSandal from '../assets/sneakers/islaSandal.jpg'; //jordan
 import forceZoom from '../assets/sneakers/forceZoom.jpg'; // Jordan
 import airJordan from '../assets/sneakers/airJordan.jpg';
 import allStar from '../assets/sneakers/allstar.jpg'; // converse
@@ -19,7 +19,7 @@ export const sneakersList = [
     style: 'Casual',
     esthetique: 4,
     confort: 5,
-    image: airMax // <- nom simplifié de la sneaker
+    image: islaSandal
   },
   {
     id: "2",
@@ -30,7 +30,7 @@ export const sneakersList = [
     esthetique: 3,
     confort: 4,
     image: forceZoom,
-    bestSeller: true
+    bestSeller: true   
   },
   {
     id: "3",
